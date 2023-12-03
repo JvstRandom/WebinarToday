@@ -19,7 +19,7 @@
         <button class="btn mt-3" type="submit">Login</button>
       </form>
       <div class="text-center fs-6">
-        <router-link to="#">Forget password?</router-link> or <router-link to="/sign up">Sign up</router-link>
+        <router-link to="#">Forget password?</router-link> or <router-link to="/sign-up">Sign up</router-link>
       </div>
     </div>
   </template>

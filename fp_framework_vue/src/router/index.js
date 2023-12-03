@@ -12,34 +12,42 @@ const routes = [
   {
     path: '/',
     component: HomePage,
+    meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/profile penyelenggara',
+    path: '/profile-penyelenggara',
     component: P_Profile,
+    meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/profile user',
+    path: '/profile-user',
     component: U_Profile,
+    meta: { showHeader: true, showFooter: true },
   },
   {
     path: '/search',
     component: search_page,
+    meta: { showHeader: true, showFooter: true },
   },
   {
     path: '/page',
     component: webinar_page,
+    meta: { showHeader: true, showFooter: true },
   },
   {
     path: '/login',
     component: login,
+    meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/sign up',
+    path: '/sign-up',
     component: Signup,
+    meta: { showHeader: true, showFooter: true },
   },
   {
     path: '/dashboard',
     component: Dashboard,
+    meta: { showHeader: true, showFooter: true },
   },
   // Tambahkan rute lain jika diperlukan
 ];

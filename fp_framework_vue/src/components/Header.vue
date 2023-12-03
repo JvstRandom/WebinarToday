@@ -18,8 +18,8 @@
           <li class="dropdown">
             <a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><router-link to="/profile user">Pengguna</router-link></li>
-              <li><router-link to="/profile penyelenggara">Penyelenggara</router-link></li>
+              <li><router-link to="/profile-user">Pengguna</router-link></li>
+              <li><router-link to="/profile-penyelenggara">Penyelenggara</router-link></li>
               
             </ul>
           </li>

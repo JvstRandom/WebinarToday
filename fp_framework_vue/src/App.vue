@@ -1,8 +1,9 @@
+<!-- App.vue -->
 <template>
   <div>
-    <Header />
+    <Header v-if="currentRoute.meta.showHeader" />
     <router-view />
-    <Footer />
+    <Footer v-if="currentRoute.meta.showFooter" />
   </div>
 </template>
 
@@ -14,6 +15,11 @@ export default {
   components: {
     Header,
     Footer,
+  },
+  computed: {
+    currentRoute() {
+      return this.$route;
+    },
   },
 }
 </script>
