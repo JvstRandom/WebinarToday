@@ -1,4 +1,5 @@
 <template>
+  <br><br><br><br>
   <div class="container">
     <div class="text1">
       <h3>Webinar</h3>
@@ -79,6 +80,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -93,7 +95,7 @@ export default {
         upcoming: false,
       },
       webinars: [
-        { id: 1, title: 'When life gives you oranges', isFree: true, isPaid: false, views: 2465, date: 'Jul 26, 2019' },
+        { id: 1, title: 'When life gives you oranges', isFree: 'y', isPaid: false, views: 2465, date: 'Jul 26, 2019' },
         // ... webinar lainnya
       ],
     };

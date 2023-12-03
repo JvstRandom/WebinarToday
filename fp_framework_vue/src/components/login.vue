@@ -10,7 +10,7 @@
       <form class="p-3 mt-3" @submit.prevent="login">
         <div class="form-field d-flex align-items-center">
           <span class="far fa-user"></span>
-          <input v-model="userName" type="text" name="userName" id="userName" placeholder="Username">
+          <input v-model="email" type="text" name="userName" id="userName" placeholder="Username">
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
@@ -25,16 +25,23 @@
   </template>
   
   <script>
+
+  import axios from 'axios';
+
   export default {
     data() {
       return {
-        userName: '',
+        email: '',
         password: '',
         judul: 'Your App Title',
       };
     },
     methods: {
-      login() {
+      async login() {
+          const response = await axios.post('login', {
+            email: this.email,
+            password: this.password
+          })
         // Handle login logic here
         // Access username with this.userName and password with this.password
         // You can perform API calls or other authentication processes

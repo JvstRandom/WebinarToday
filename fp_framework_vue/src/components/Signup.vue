@@ -10,15 +10,15 @@
       <form class="p-3 mt-3" @submit.prevent="register">
         <div class="form-field d-flex align-items-center">
           <span class="far fa-user"></span>
-          <input v-model="namaPenyelenggara" type="text" name="namaPenyelenggara" id="namaPenyelenggara" placeholder="Nama penyelenggara">
+          <input v-model="namaOrganisasi" type="text" name="namaPenyelenggara" id="namaPenyelenggara" placeholder="Nama penyelenggara">
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
-          <input v-model="nomorTelpon" type="text" name="nomorTelpon" id="nomorTelpon" placeholder="Nomor telpon">
+          <input v-model="noTelp" type="text" name="nomorTelpon" id="nomorTelpon" placeholder="Nomor telpon">
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
-          <input v-model="alamatEmail" type="email" name="alamatEmail" id="alamatEmail" placeholder="Alamat email">
+          <input v-model="email" type="email" name="alamatEmail" id="alamatEmail" placeholder="Alamat email">
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
@@ -30,7 +30,7 @@
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
-          <input v-model="alamatWebsite" type="text" name="alamatWebsite" id="alamatWebsite" placeholder="Alamat website">
+          <input v-model="website" type="text" name="alamatWebsite" id="alamatWebsite" placeholder="Alamat website">
         </div>
         <button class="btn mt-3" type="submit">Daftar</button>
       </form>
@@ -38,20 +38,31 @@
   </template>
   
   <script>
+  import axios from 'axios';
   export default {
     data() {
       return {
-        namaPenyelenggara: '',
-        nomorTelpon: '',
-        alamatEmail: '',
+        namaOrganisasi: '',
+        noTelp: '',
+        email: '',
         password: '',
         konfirmasiPassword: '',
-        alamatWebsite: '',
+        website: '',
         judul: 'Your App Title',
       };
     },
     methods: {
-      register() {
+      async register() {
+        await axios.post('addOrganisasi', {
+          namaOrganisasi: this.namaOrganisasi,
+          noTelp: this.noTelp,
+          email: this.email,
+          website: this.website,
+          password: this.password,
+        });
+
+        //redirect ke loggin
+        this.$router.push('/login')
         // Handle registration logic here
         // Access form data with this.namaPenyelenggara, this.nomorTelpon, etc.
         // You can perform API calls or other registration processes

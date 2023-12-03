@@ -6,6 +6,7 @@ import U_Profile from '@/components/P_Profile.vue';
 import webinar_page from '@/components/webinar_page.vue';
 import login from '@/components/login.vue';
 import Signup from '@/components/Signup.vue';
+import Dashboard from '@/components/dashboard.vue';
 
 const routes = [
   {
@@ -35,6 +36,10 @@ const routes = [
   {
     path: '/sign up',
     component: Signup,
+  },
+  {
+    path: '/dashboard',
+    component: Dashboard,
   },
   // Tambahkan rute lain jika diperlukan
 ];

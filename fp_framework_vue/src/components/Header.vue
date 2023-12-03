@@ -14,6 +14,7 @@
           <li><router-link to="/tentang-kami">Tentang Kami</router-link></li>
           <li><router-link to="/layanan">Layanan</router-link></li>
           <li><router-link to="/search">WebinarToday</router-link></li>
+          <li><router-link to="/dashboard">Dashboard</router-link></li>
           <li class="dropdown">
             <a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
