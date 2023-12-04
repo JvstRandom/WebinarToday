@@ -285,7 +285,7 @@ export default {
           this.organisasi = organisasiResponse.data.payload;
 
           // Make another request to fetch webinars based on organisasi_id
-          const webinarsResponse = await axios.get(`http://localhost:8000/webinars/${organisasi_id}`);
+          const webinarsResponse = await axios.get(`http://localhost:8000/webinars-list-penyelenggara/${organisasi_id}`);
           console.log('Webinars API Response:', webinarsResponse.data);
 
           // Check if the response has the expected structure

@@ -25,7 +25,7 @@ app.get("/webinar-list", (req, res) => {
     })
 })
 
-app.get("/webinars/:organisasi_id", (req, res) => {
+app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     const organisasi_id = req.params.organisasi_id;
 
     const sql = `
