@@ -25,6 +25,48 @@ app.get("/webinar-list", (req, res) => {
     })
 })
 
+app.get("/webinars/:organisasi_id", (req, res) => {
+    const organisasi_id = req.params.organisasi_id;
+
+    const sql = `
+        SELECT *
+        FROM webinar
+        WHERE organisasi_id = ?
+        ORDER BY waktu DESC
+    `;
+
+    db.query(sql, [organisasi_id], (err, result) => {
+        if (err) {
+            response(500, "error", "Internal Server Error", res);
+        } else {
+            response(200, result, "Webinars retrieved successfully", res);
+        }
+    });
+});
+
+app.get("/penyelenggara", (req, res) => {
+    const sql = "SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi"
+    db.query(sql, (err, result)=> {
+        if (err) throw err;
+        response(200, result, "webinars get list", res)
+    })
+})
+
+app.get("/penyelenggara/:organisasi_id", (req, res) => {
+    const organisasi_id = req.params.organisasi_id;
+    const sql = `SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi WHERE organisasi_id = ?`;
+
+    db.query(sql, [organisasi_id], (err, result) => {
+        if (err) throw err;
+        
+        if (result.length > 0) {
+            response(200, result[0], "Penyelenggara details retrieved successfully", res);
+        } else {
+            response(404, null, "Penyelenggara not found", res);
+        }
+    });
+});
+
 app.post("/addOrganisasi", (req, res) => {
     const { namaOrganisasi, noTelp, email, website, password } = req.body
     const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${password}')`; 
