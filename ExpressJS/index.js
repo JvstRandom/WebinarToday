@@ -67,6 +67,7 @@ app.get("/penyelenggara/:organisasi_id", (req, res) => {
     });
 });
 
+// buat registrasi penyelenggara
 app.post("/addOrganisasi", (req, res) => {
     const { namaOrganisasi, noTelp, email, website, password } = req.body
     const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${password}')`; 
@@ -80,3 +81,83 @@ app.post("/addOrganisasi", (req, res) => {
         }
     })
 })
+
+// buat nampilin webinar penyelenggara sesuai id organisasinya
+app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
+   const organisasi_id = req.params.organisasi_id;
+   const sql = `SELECT webinar_id, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id, views FROM webinar WHERE organisasi_id = ${organisasi_id}`
+   db.query(sql, (err, result) => {
+    if (err) throw err;
+    response(200, result, "list", res);
+   })
+})
+
+// buat nambah webinar sesuai dengan organisasi id
+app.post("/addWebinar/:organisasi_id", (req, res) => {
+    const organisasi_id = req.params.organisasi_id;
+    const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body;
+    const sql = `INSERT INTO webinar (namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id) VALUES 
+    ('${namaWebinar}', '${Online}', '${harga}', '${sertif}', '${deskripsi}', '${lokasi}', '${waktu}', '${cp}', '${host}', '${organisasi_id}')`;
+    // console.log(req.body)
+    db.query(sql, (err, result)=>{
+        // console.log(result);
+        if (err) response(400, "invalid", "error", res);
+        if (result?.affectedRows) {
+            response(200, result.insertId, "Data Added Succesfully", res)
+        }
+    })
+})
+
+// registrasi pengguna
+app.post("/registerUser", (req, res) => {
+    const { email, noTelp, password } = req.body;
+    const sql = `INSERT INTO user (email, noTelp, password) VALUES ('${email}', '${noTelp}', '${password}')`;
+    // console.log(req.body)
+    db.query(sql, (err, result) =>{
+        // console.log(result)
+        if (err) response(400, "invalid", "error", res);
+        if (result?.affectedRows) {
+            response(200, result.insertId, "Data Added Succesfully", res)
+        }
+    })
+})
+
+// daftar user ke webinar
+app.post('/daftarWebinar/:user_id/:webinar_id', (req, res) => {
+    const user_id = req.params.user_id;
+    const webinar_id = req.params.webinar_id;
+    const { tgl_pesan } = req.body;
+
+    const sql = `INSERT INTO user_order (tgl_pesan, user_id, webinar_id) VALUES ('${tgl_pesan}', '${user_id}', '${webinar_id}')`;
+    console.log(req.body);
+
+    db.query(sql, (err, result) => {
+        console.log(result);
+        if (err) response(400, "invalid", "error", res);
+        if (result?.affectedRows) {
+            response(200, result.insertId, "Data Added Succesfully", res)
+        }
+    })
+})
+
+// tampilan webinar list menurut like dan user_id
+
+
+// tampilan user list menurut webinar id atau tampilan order
+app.get('/peserta/:webinar_id', (req, res) => {
+    const webinar_id = req.params.webinar_id;
+
+    const sql = `SELECT user_order.tgl_pesan, user.email, user.noTelp, webinar.namaWebinar, webinar.harga 
+    FROM user_order
+    JOIN webinar 
+    ON user_order.webinar_id = webinar.webinar_id 
+    JOIN user 
+    ON user_order.user_id = user.user_id
+    WHERE user_order.webinar_id = ${webinar_id}`
+
+    db.query(sql, (err, result)=> {
+        if (err) throw err;
+        response(200, result, "user get list", res)
+    })
+
+}) 

@@ -2,13 +2,15 @@
   <div>
     <!-- ======= Hero Section ======= -->
     <section id="hero" class="clearfix">
-      <div class="container" data-aos="fade-up">
+      <div class="container" >
+        <!-- data-aos="fade-up" -->
 
-        <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+        <div class="hero-img" >
+          <!-- data-aos="zoom-out" data-aos-delay="200" -->
           <img src="@/assets/img/hero-img.svg" alt="" class="img-fluid">
         </div>
 
-        <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+        <div class="hero-info" >
           <h2>We provide<br><span>solutions</span><br>for your business!</h2>
           <div>
             <a href="#about" class="btn-get-started scrollto">Cari Webinar</a>
@@ -134,11 +136,16 @@
       </div>
     </section><!-- End Contact Section -->
   </div>
-</template>
 
+</template>
 <script>
 export default {
-  // Component logic goes here
+    metaInfo: {
+      script: [
+        { src: 'https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.min.js', async: true, defer: true },
+        { src: 'https://cdn.jsdelivr.net/npm/@srexi/purecounterjs/dist/purecounter_vanilla.js', async: true, defer: true },
+      ],
+    }
 }
 </script>
 
