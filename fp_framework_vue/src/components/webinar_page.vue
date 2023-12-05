@@ -15,7 +15,7 @@
                 <h4>{{ webinar.namaWebinar }}</h4>
                 <p>{{ webinar.deskripsi }}</p>
                 <div class="main-border-button">
-                  <router-link to="#">Daftar Sekarang!</router-link>
+                  <router-link to="/daftar">Daftar Sekarang!</router-link>
                 </div>
               </div>
             </div>
@@ -56,7 +56,7 @@
     <div class="gaming-library profile-library">
       <div class="col-lg-12">
         <div class="heading-section">
-          <h4><em>Your Gaming</em> Library</h4>
+          <h4><em>Rekomendasi</em> Webinar lain</h4>
         </div>
 
         <!-- Game Item 1 -->

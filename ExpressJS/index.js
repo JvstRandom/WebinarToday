@@ -171,3 +171,5 @@ app.get('/peserta/:webinar_id', (req, res) => {
     })
 
 }) 
+
+// delete webinar
