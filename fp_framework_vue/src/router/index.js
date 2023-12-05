@@ -7,6 +7,7 @@ import webinar_page from '@/components/webinar_page.vue';
 import login from '@/components/login.vue';
 import Signup from '@/components/Signup.vue';
 import Dashboard from '@/components/dashboard.vue';
+import addWebinar from '@/components/addWebinar.vue';
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
   {
     path: '/dashboard',
     component: Dashboard,
+    meta: { showHeader: true, showFooter: true },
+  },
+  {
+    path: '/addWebinar',
+    component: addWebinar,
     meta: { showHeader: true, showFooter: true },
   },
   // Tambahkan rute lain jika diperlukan
