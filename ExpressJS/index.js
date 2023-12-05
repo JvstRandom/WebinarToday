@@ -25,6 +25,16 @@ app.get("/webinar-list", (req, res) => {
     })
 })
 
+//nampilin webinar sesuai webinar_id
+app.get("/webinar/:webinar_id", (req, res)=> {
+    const webinar_id = req.params.webinar_id;
+    const sql = `SELECT namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id, views FROM webinar WHERE webinar_id = ${webinar_id} `
+    db.query(sql, (err, result)=> {
+        if (err) throw err;
+        response(200, result, "webinar sesuai id webinar", res)
+    })
+})
+
 app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     const organisasi_id = req.params.organisasi_id;
 

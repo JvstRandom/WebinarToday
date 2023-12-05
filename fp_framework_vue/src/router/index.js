@@ -30,7 +30,7 @@ const routes = [
     meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/page',
+    path: '/page/:id',
     component: webinar_page,
     meta: { showHeader: true, showFooter: true },
   },

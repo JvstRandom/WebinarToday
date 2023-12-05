@@ -79,7 +79,7 @@ header, nav, section, article, aside, footer, hgroup {
 html, body {
   font-family: 'Poppins', sans-serif;
   font-weight: 400;
-  background-color: #000000;
+  background-color: #ffffff;
   font-size: 16px;
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -1524,7 +1524,7 @@ Profile Style
 .main-profile {
   border-radius: 23px;
   padding: 30px;
-  background-color: #1f2122;
+  background-color: rgb(228, 233, 236);
 }
 
 .main-profile .main-info span {
@@ -1551,7 +1551,7 @@ Profile Style
 .main-profile ul {
   border-radius: 23px;
   padding: 30px;
-  background-color: #27292a;
+  background-color: #cdd2d3;
 }
 
 .main-profile ul li {

@@ -41,7 +41,7 @@
     <!-- LIST WEBINAR -->
     <div class="list-webinar">
       <div class="card-list" v-for="webinar in filteredWebinars" :key="webinar.id">
-        <a :href="'/page'">
+        <RouterLink :to="{path:'/page/'+webinar.id}">
           <article class="card">
             <figure class="card-image">
               <img src="https://images.unsplash.com/photo-1494253109108-2e30c049369b?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDcwMTUwOQ&ixlib=rb-1.2.1&q=85" alt="An orange painted blue, cut in half laying on a blue background" />
@@ -73,7 +73,7 @@
               {{ webinar.date }}
             </div>
           </article>
-        </a>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -95,7 +95,7 @@ export default {
         upcoming: false,
       },
       webinars: [
-        { id: 1, title: 'When life gives you oranges', isFree: 'y', isPaid: false, views: 2465, date: 'Jul 26, 2019' },
+        { id: 101, title: 'Succes Investment Mindser: Bagaimana Cara Mengatur Investasi agar Menjadi Investor yang Sukses.', isFree: 'y', isPaid: false, views: 2465, date: 'Jul 26, 2019' },
         // ... webinar lainnya
       ],
     };
