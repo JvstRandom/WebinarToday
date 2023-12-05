@@ -44,7 +44,7 @@
         <RouterLink :to="{path:'/page/'+webinar.id}">
           <article class="card">
             <figure class="card-image">
-              <img src="https://images.unsplash.com/photo-1494253109108-2e30c049369b?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDcwMTUwOQ&ixlib=rb-1.2.1&q=85" alt="An orange painted blue, cut in half laying on a blue background" />
+              <img src="@/assets/img/poster_webinar_upn.png" alt="An orange painted blue, cut in half laying on a blue background" />
             </figure>
             <div class="card-header">
               <a href="#">{{ webinar.title }}</a>
