@@ -11,9 +11,11 @@
             <li class="breadcrumb-item active" aria-current="page">Penyelenggara Profile</li>
           </ol>
         </nav>
+        
         <!-- /Breadcrumb -->
 
         <div class="row gutters-sm">
+          <message-overlay :status="status" :message="message" ref="messageOverlay"></message-overlay>
             <div class="col mb-3">
               <div class="card">
                 <div class="card-body">
@@ -151,13 +153,22 @@
 
           <!-- skill -->
           <div class="row gutters-sm">
+
               <div class="col mb-3">
                 <div class="card h-100">
                   <div class="card-body">
                     
+                    <div class="row">
+                      <hr>
+                      <div class="col-sm"> 
+                        <h6 class="d-flex align-items-center mb-3">List Webinar:</h6>
+                      </div>
+                      <div class="col-sm text-end">
+                        <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link>
+                      </div>
+                    </div>
                     <hr>
-                    <h6 class="d-flex align-items-center mb-3">List Webinar:</h6>
-                    <hr>
+
                     <div class="webinar-list">
                             <article v-for="webinar in displayedWebinars" :key="webinar.id" class="card custom-card">
                               <figure class="card-image">
@@ -221,101 +232,150 @@
 </template>
 
 <script>
-import axios from 'axios';
+  import axios from 'axios';
+  import MessageOverlay from '@/components/MessageOverlay.vue'; // Adjust the path
 
-export default {
-  data() {
-    return {
-      webinarList: [], // Change to an array to store multiple webinars
-      organisasi: {},
-      itemsPerPage: 4,
-      currentPage: 1,
-    };
-  },
-  created() {
-    // Make an Axios request to fetch organisasi data and associated webinars
-    this.fetchOrganisasiData();
-  },
-  computed: {
-    // Calculate total pages based on the number of webinars and items per page
-    totalPages() {
-      return Math.ceil(this.webinarList.length / this.itemsPerPage);
+  export default {
+    components: {
+      MessageOverlay,
     },
-    // Calculate the array of webinars to display on the current page
-    displayedWebinars() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      const endIndex = startIndex + this.itemsPerPage;
-      return this.webinarList.slice(startIndex, endIndex);
+    data() {
+      return {
+        webinarList: [], // Change to an array to store multiple webinars
+        organisasi: {},
+        itemsPerPage: 4,
+        currentPage: 1,
+        status: null, // Tambahkan status
+        message: '', // Tambahkan pesan
+      };
     },
-  },
-  methods: {
-    getImageUrl(blobData) {
-      console.log('Blob Data:', blobData);
-
-      // Extract actual data from Proxy
-      const bufferData = blobData.data || [];
-
-      // Convert Buffer data to Uint8Array
-      const uint8Array = new Uint8Array(bufferData);
-
-      if (uint8Array.length > 0) {
-        const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
-        return URL.createObjectURL(blob);
-      } else {
-        return ''; // or set a default image URL
-      }
+    created() {
+      // Make an Axios request to fetch organisasi data and associated webinars
+      this.fetchOrganisasiData();
     },
-    formatWebinarDate(dateTimeString) {
-      // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
-      const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
-      const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
-      return formattedDate;
+    computed: {
+      // Calculate total pages based on the number of webinars and items per page
+      totalPages() {
+        return Math.ceil(this.webinarList.length / this.itemsPerPage);
+      },
+      // Calculate the array of webinars to display on the current page
+      displayedWebinars() {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return this.webinarList.slice(startIndex, endIndex);
+      },
     },
-    async fetchOrganisasiData() {
-      try {
-        // Assume you have the organisasi_id from the logged-in penyelenggara
-        const organisasi_id = 1; // Replace with the actual organisasi_id
+    methods: {
+      getImageUrl(blobData) {
+        console.log('Blob Data:', blobData);
 
-        // Make a request to fetch organisasi data
-        const organisasiResponse = await axios.get(`http://localhost:8000/penyelenggara/${organisasi_id}`);
-        console.log('Organisasi API Response:', organisasiResponse.data);
+        // Extract actual data from Proxy
+        const bufferData = blobData.data || [];
 
-        // Check if the response has the expected structure
-        if (organisasiResponse.data && organisasiResponse.data.payload) {
-          this.organisasi = organisasiResponse.data.payload;
+        // Convert Buffer data to Uint8Array
+        const uint8Array = new Uint8Array(bufferData);
 
-          // Make another request to fetch webinars based on organisasi_id
-          const webinarsResponse = await axios.get(`http://localhost:8000/webinars-list-penyelenggara/${organisasi_id}`);
-          console.log('Webinars API Response:', webinarsResponse.data);
+        if (uint8Array.length > 0) {
+          const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
+          return URL.createObjectURL(blob);
+        } else {
+          return ''; // or set a default image URL
+        }
+      },
+
+      async submitForm() {
+        try {
+          const response = await axios.post(apiUrl, this.formData);
+
+          // Set status and message for the overlay
+          this.status = 'success';
+          this.message = 'Webinar berhasil ditambahkan!';
+
+          // Show the overlay
+          this.$refs.messageOverlay.showOverlay();
+
+          // Clear the status and message after 5 seconds
+          this.clearStatusAndMessage();
+
+          // Perbarui data webinar setelah menambahkan
+          this.fetchOrganisasiData();
+
+          console.log('Form submitted successfully!');
+        } catch (error) {
+          console.error('Error submitting form:', error);
+
+          // Set status and message for the overlay
+          this.status = 'error';
+          this.message = 'Gagal menambahkan webinar. Silakan coba lagi.';
+
+          // Show the overlay with error message
+          this.$refs.messageOverlay.showOverlay();
+
+          // Clear the status and message after 5 seconds
+          this.clearStatusAndMessage();
+
+          console.error('Form submission failed!');
+        }
+      },
+
+      clearStatusAndMessage() {
+        setTimeout(() => {
+          this.status = null;
+          this.message = '';
+        }, 5000);
+      },
+
+      formatWebinarDate(dateTimeString) {
+        // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
+        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+        const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
+        return formattedDate;
+      },
+      async fetchOrganisasiData() {
+        try {
+          // Assume you have the organisasi_id from the logged-in penyelenggara
+          const organisasi_id = 1; // Replace with the actual organisasi_id
+
+          // Make a request to fetch organisasi data
+          const organisasiResponse = await axios.get(`http://localhost:8000/penyelenggara/${organisasi_id}`);
+          console.log('Organisasi API Response:', organisasiResponse.data);
 
           // Check if the response has the expected structure
-          if (webinarsResponse.data && webinarsResponse.data.payload) {
-            this.webinarList = webinarsResponse.data.payload;
+          if (organisasiResponse.data && organisasiResponse.data.payload) {
+            this.organisasi = organisasiResponse.data.payload;
+
+            // Make another request to fetch webinars based on organisasi_id
+            const webinarsResponse = await axios.get(`http://localhost:8000/webinars-list-penyelenggara/${organisasi_id}`);
+            console.log('Webinars API Response:', webinarsResponse.data);
+
+            // Check if the response has the expected structure
+            if (webinarsResponse.data && webinarsResponse.data.payload) {
+              this.webinarList = webinarsResponse.data.payload;
+            }
           }
+        } catch (error) {
+          console.error('Error fetching data', error);
         }
-      } catch (error) {
-        console.error('Error fetching data', error);
-      }
+      },
+      // Other methods for pagination
+      prevPage() {
+        if (this.currentPage > 1) {
+          this.currentPage--;
+        }
+      },
+      nextPage() {
+        if (this.currentPage < this.totalPages) {
+          this.currentPage++;
+        }
+      },
+      gotoPage(page) {
+        if (page >= 1 && page <= this.totalPages) {
+          this.currentPage = page;
+        }
+      },
+      // Other methods for liking, editing, etc.
     },
-    // Other methods for pagination
-    prevPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
-    },
-    gotoPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-      }
-    },
-    // Other methods for liking, editing, etc.
-  },
-};
+  };
 </script>
 
 <style scoped>

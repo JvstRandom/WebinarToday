@@ -8,6 +8,7 @@ import login from '@/components/login.vue';
 import Signup from '@/components/Signup.vue';
 import Dashboard from '@/components/dashboard.vue';
 import daftarWebinar from '@/components/daftarWebinar.vue'
+import addWebinar from '@/components/addWebinar.vue';
 
 const routes = [
   {
@@ -53,6 +54,11 @@ const routes = [
   {
     path: '/daftar',
     component: daftarWebinar,
+    meta: { showHeader: true, showFooter: true },
+  },
+  {
+    path: '/addWebinar',
+    component: addWebinar,
     meta: { showHeader: true, showFooter: true },
   },
   // Tambahkan rute lain jika diperlukan
