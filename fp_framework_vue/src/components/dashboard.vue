@@ -207,7 +207,7 @@
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Dashboard</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
+            <!-- <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
                 <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
@@ -216,18 +216,38 @@
                 <svg class="bi"><use xlink:href="#calendar3"/></svg>
                 This week
             </button>
-            </div>
+            </div> -->
         </div>
 
         <h2>List Webinar Anda</h2>
-        <div class="table-responsive small">
+        <div class="webinar-cont">
+            <div class="card">
+                <!-- v-for="(webinar, index) in this.webinars" :key="index" -->
+                <!-- <div class="card-header">
+                   
+                </div> -->
+                <div class="card-body">
+                    <h5 class="card-title">nama Webinar</h5>
+                    <p class="card-text">Deskripsi</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">waktu : Senin, 23 agustus 2023</li>
+                        <li class="list-group-item">host : host</li>
+                        <li class="list-group-item">harga : harga</li>
+                        <li class="list-group-item">CP : cp</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                    <a href="#" class="btn btn-danger">Delete</a>
+                </div>
+                </div>
+        </div>
+        <!-- <div class="table-responsive small">
             <table class="table table-striped table-sm">
             <thead>
                 <tr>
                 <th scope="col">#</th>
-                <th scope="col">Header</th>
-                <th scope="col">Header</th>
-                <th scope="col">Header</th>
+                <th scope="col">Judul Webinar</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Sertifikat</th>
                 <th scope="col">Header</th>
                 </tr>
             </thead>
@@ -241,7 +261,7 @@
                 </tr>
             </tbody>
             </table>
-        </div>
+        </div> -->
         </main>
     </div>
     </div>
@@ -249,7 +269,40 @@
 </template>
 
 <script>
+import axios from "axios";
 
+export default {
+  data() {
+    return {
+      rows: [],
+    };
+  },
+  mounted() {
+    this.fetchProtectedData();
+  },
+  methods: {
+    async fetchProtectedData() {
+      try {
+        const response = await axios.get('protected', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+
+        if (response.data) {
+        this.rows = response.data.rows;
+        console.log(this.rows);
+        } else {
+        console.error('Response data is undefined:', response);
+        }
+
+        // this.message = response.data.message;
+      } catch (error) {
+        console.error('Failed to fetch protected data:', error.response.data.error);
+      }
+    },
+  },
+};
 </script>
 
 

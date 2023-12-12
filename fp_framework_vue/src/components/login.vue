@@ -10,7 +10,7 @@
       <form class="p-3 mt-3" @submit.prevent="login">
         <div class="form-field d-flex align-items-center">
           <span class="far fa-user"></span>
-          <input v-model="email" type="text" name="userName" id="userName" placeholder="Username">
+          <input v-model="email" type="text" name="userName" id="userName" placeholder="Email">
         </div>
         <div class="form-field d-flex align-items-center">
           <span class="fas fa-key"></span>
@@ -33,7 +33,7 @@
       return {
         email: '',
         password: '',
-        judul: 'Your App Title',
+        judul: 'Login Penyelenggara',
       };
     },
     methods: {
@@ -41,7 +41,18 @@
           const response = await axios.post('login', {
             email: this.email,
             password: this.password
-          })
+          });
+
+          const token = response.data.token;
+
+          // Include the token in the headers for subsequent requests
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+          // Redirect to the protected route
+          localStorage.setItem('token', token);
+          // localStorage.setItem('rows', response.data.rows)
+          this.$router.push('/dashboard');
+          
         // Handle login logic here
         // Access username with this.userName and password with this.password
         // You can perform API calls or other authentication processes

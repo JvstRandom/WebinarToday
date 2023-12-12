@@ -13,10 +13,10 @@
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
 
-                <form>
+                <form @submit.prevent="daftarKeWebinar">
                   <div class="form-outline mb-2">
-                    <label class="form-label" for="form2Example17">Nama</label>
-                    <input type="name" id="form2Example17" class="form-control form-control-lg" />
+                    <label class="form-label" for="form2Example17">Nama Lengkap</label>
+                    <input v-model="NamaLengkap" type="name" id="form2Example17" class="form-control form-control-lg" placeholder="Nama Lengkap"/>
                     
                   </div>
 
@@ -50,3 +50,31 @@
 </section>
   </div>
 </template>
+
+<script>
+  import axios from 'axios';
+  export default {
+    data() {
+      return {
+        username: '',
+        email: '',
+        noTelp: '',
+        password: '',
+        konfirmasiPassword: '',
+        judul: 'Daftar User',
+      };
+    },
+    methods: {
+      async register() {
+        await axios.post('registerUser', {
+          username: this.username,
+          email: this.email,
+          noTelp: this.noTelp,
+          password: this.password,
+        });
+
+        //nambah methods lain
+      },
+    },
+  };
+</script>

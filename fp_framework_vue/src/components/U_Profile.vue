@@ -112,60 +112,43 @@
   
               <div class="row gutters-sm">
                 <h3>Webinar yang Anda Ikuti</h3>
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="list-webinar">
+                <div class="card-list" v-for="webinar in filteredWebinars" :key="webinar.id">
+                  <a href="#">
+                    <article class="card">
+                      <figure class="card-image">
+                        <img src="@/assets/img/poster_webinar_upn.png" alt="An orange painted blue, cut in half laying on a blue background" />
+                      </figure>
+                      <div class="card-header">
+                        <a href="#">{{ webinar.title }}</a>
+                        <button class="icon-button" @click="like(webinar.id)">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="Heart">
+                            <path d="M7 3C4.239 3 2 5.216 2 7.95c0 2.207.875 7.445 9.488 12.74a.985.985 0 0 0 1.024 0C21.125 15.395 22 10.157 22 7.95 22 5.216 19.761 3 17 3s-5 3-5 3-2.239-3-5-3z" />
+                          </svg>
+                        </button>
                       </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="card-footer">
+                        <div class="card-meta card-meta--views">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="EyeOpen">
+                            <path d="M21.257 10.962c.474.62.474 1.457 0 2.076C19.764 14.987 16.182 19 12 19c-4.182 0-7.764-4.013-9.257-5.962a1.692 1.692 0 0 1 0-2.076C4.236 9.013 7.818 5 12 5c4.182 0 7.764 4.013 9.257 5.962z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          {{ webinar.views }}
+                        </div>
                       </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                      <div class="card-meta card-meta--date">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="Calendar">
+                          <rect x="2" y="4" width="20" height="18" rx="4" />
+                          <path d="M8 2v4" />
+                          <path d="M16 2v4" />
+                          <path d="M2 10h20" />
+                        </svg>
+                        {{ webinar.date }}
                       </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
+                    </article>
+                  </a>
                 </div>
-                <div class="col-sm-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                      <small>Web Design</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Website Markup</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>One Page</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Mobile Template</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                      <small>Backend API</small>
-                      <div class="progress mb-3" style="height: 5px">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              </div>
                 <h3>Webinar yang Anda Sukai</h3>
                 <div class="col-sm-6 mb-3">
                   <div class="card h-100">
@@ -203,7 +186,16 @@
   </template>
   
   <script>
+  import axios from "axios";
+
   export default {
+    async created() {
+      const response = await axios.get('user', {
+        headers: {
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        }
+      })
+    },
     methods: {
       goToProfile() {
         // Navigasi ke rute profil penyelenggara

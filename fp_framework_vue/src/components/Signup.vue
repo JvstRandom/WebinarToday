@@ -48,7 +48,7 @@
         password: '',
         konfirmasiPassword: '',
         website: '',
-        judul: 'Your App Title',
+        judul: 'Daftar Penyelenggara',
       };
     },
     methods: {

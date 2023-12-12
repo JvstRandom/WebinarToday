@@ -1,8 +1,14 @@
+require('dotenv').config()
+
 const app = require('express')();
 const PORT = 8000;
 const bodyParser = require('body-parser');
 const db = require('./connection');
-const response = require('./response')
+const response = require('./response');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const secretKey = '161fc85f535615e1b630c59fe4f9d54cfe0dd824a174455f2aefd46fca9b69a1';
 
 app.use(bodyParser.json())
 
@@ -13,8 +19,10 @@ app.use((req, res, next) => {
     next();
 })
 
+app.use(cors());
+
 app.listen(PORT, () => {
-    console.log('listening on port ' + PORT);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 app.get("/webinar-list", (req, res) => {
@@ -78,9 +86,11 @@ app.get("/penyelenggara/:organisasi_id", (req, res) => {
 });
 
 // buat registrasi penyelenggara
-app.post("/addOrganisasi", (req, res) => {
-    const { namaOrganisasi, noTelp, email, website, password } = req.body
-    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${password}')`; 
+app.post("/addOrganisasi", async ( req, res) => {
+    const { namaOrganisasi, noTelp, email, website, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${hashedPassword}')`; 
 
     console.log(req.body)
     db.query(sql, (err, result) => {
@@ -91,6 +101,57 @@ app.post("/addOrganisasi", (req, res) => {
         }
     })
 })
+
+//login
+app.post('/login', async (req, res) => {
+    const {email, password} = req.body;
+
+    db.query('SELECT * FROM organisasi WHERE email = ?', [email], async (err, rows) => {
+        if (err) response(400, "invalid", "error", res);
+
+         if (rows.length === 0){
+            return response(401, "invalid email", "error", res);
+        } 
+
+        const user = rows[0];
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        
+        if (!passwordMatch) {
+            return response(402, "invalid password", "error", res);
+        }
+
+        const token = jwt.sign({ organisasi_id: user.organisasi_id }, String(process.env.ACCESS_TOKEN_SECRET), {
+            expiresIn: 86400 //24h expired
+        });
+        return res.status(200).json({ token , rows});
+    })
+})
+
+// protected web
+app.get('/protected', authenticationToken, (req, res) => {
+    res.status(200).json({ message: 'You have access to this protected route' });
+})
+
+function authenticationToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    
+    if(!token) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    jwt.verify(token, String(process.env.ACCESS_TOKEN_SECRET), (err, user) => {
+        if (err) {
+            console.error(err);
+            return res.status(403).json({ error: 'Forbidden ' + token});
+        }
+        // return res.status(200).json({ message: 'bisa masuk'});
+        req.user = user;
+        next();
+    })
+
+}
 
 // buat nampilin webinar penyelenggara sesuai id organisasinya
 app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
@@ -120,8 +181,8 @@ app.post("/addWebinar/:organisasi_id", (req, res) => {
 
 // registrasi pengguna
 app.post("/registerUser", (req, res) => {
-    const { email, noTelp, password } = req.body;
-    const sql = `INSERT INTO user (email, noTelp, password) VALUES ('${email}', '${noTelp}', '${password}')`;
+    const { username, email, noTelp, password } = req.body;
+    const sql = `INSERT INTO user (username, email, noTelp, password) VALUES ('${username}', '${email}', '${noTelp}', '${password}')`;
     // console.log(req.body)
     db.query(sql, (err, result) =>{
         // console.log(result)
@@ -173,3 +234,15 @@ app.get('/peserta/:webinar_id', (req, res) => {
 }) 
 
 // delete webinar
+
+// tampilan user sesuai user id
+app.get('/user/:user_id', (req, res)=> {
+    const user_id = req.params.user_id;
+
+    const sql = `SELECT username, email, noTelp FROM user WHERE user_id = ${user_id}`
+
+    db.query(sql, (err, result)=> {
+        if (err) throw err;
+        response(200, result, "user get list", res)
+    })
+})
