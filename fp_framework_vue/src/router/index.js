@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '@/components/HomePage.vue';
+import HomePage from '@/view/HomePage.vue';
 import search_page from '@/components/search_page.vue';
 import P_Profile from '@/components/P_Profile.vue';
 import U_Profile from '@/components/U_Profile.vue';
