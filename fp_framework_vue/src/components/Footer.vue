@@ -6,12 +6,12 @@
         <div class="row">
 
           <div class="col-lg-4 col-md-6 footer-info">
-            <h3>NewBiz</h3>
-            <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus. Scelerisque felis imperdiet proin fermentum leo. Amet volutpat consequat mauris nunc congue.</p>
+            <h3  style="text-align: justify; margin-right: 20px;">WebinarToday</h3>
+            <p  style="text-align: justify; margin-right: 20px;">Webinar Today adalah platform inovatif yang didedikasikan untuk menyediakan akses kepada para peserta untuk berbagai webinar berkualitas tinggi di berbagai bidang. Kami membawa bersama pemimpin industri, ahli, dan pembicara terkemuka untuk berbagi pengetahuan, pengalaman, dan wawasan terbaru.</p>
           </div>
 
           <div class="col-lg-2 col-md-6 footer-links">
-            <h4>Useful Links</h4>
+            <h4 style="margin-bottom: 43px; margin-top: 10px;">Useful Links</h4>
             <ul>
               <li><router-link to="/">Home</router-link></li>
               <li><router-link to="/about">About us</router-link></li>
@@ -22,13 +22,11 @@
           </div>
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h4>Contact Us</h4>
-            <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              United States <br>
-              <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> info@example.com<br>
+            <h4 style="margin-bottom: 5px; margin-top: 10px;">Contact Us</h4>
+            <p style="text-align: justify; margin-right: 20px; color: white;">
+              Jl. Medokan Ayu no 1 Surabaya, Jawa Timur, Indonesia <br>
+              <strong>Phone:</strong> +62 5589 55488 55<br>
+              <strong>Email:</strong> WebinarToday@gmail.com<br>
             </p>
 
             <div class="social-links">
@@ -40,9 +38,9 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.</p>
+          <div class="col-lg-3 footer-newsletter">
+            <h4 style="margin-bottom: 5px; margin-top: 10px;">Our Newsletter</h4>
+            <p  style="text-align: justify; margin-right: 20px; color: white;">Bergabunglah bersama kami dan dapatkan akses eksklusif ke informasi terbaru, update acara, serta berita dan artikel menarik.</p>
             <form action="" method="post">
               <input type="email" name="email" /><input type="submit" value="Subscribe" />
             </form>
@@ -54,7 +52,7 @@
 
     <div class="container">
       <div class="copyright">
-        &copy; Copyright <strong>NewBiz</strong>. All Rights Reserved
+        &copy; Copyright <strong>WebinarToday</strong>. All Rights Reserved
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. You can delete the links only if you purchased the pro version. Licensing information: https://bootstrapmade.com/license/ Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=NewBiz -->
