@@ -194,7 +194,7 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
+                <a class="nav-link d-flex align-items-center gap-2" href="#" @click="logout">
                     <svg class="bi"><use xlink:href="#door-closed"/></svg>
                     Sign out
                 </a>
@@ -221,22 +221,22 @@
 
         <h2>List Webinar Anda</h2>
         <div class="webinar-cont">
-            <div class="card">
-                <!-- v-for="(webinar, index) in this.webinars" :key="index" -->
+            <div class="card" v-for="(webinar, index) in this.webinars" :key="index">
+                
                 <!-- <div class="card-header">
                    
                 </div> -->
                 <div class="card-body">
-                    <h5 class="card-title">nama Webinar</h5>
-                    <p class="card-text">Deskripsi</p>
+                    <h5 class="card-title">{{ webinar.namaWebinar }}</h5>
+                    <p class="card-text">{{ webinar.deskripsi }}</p>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">waktu : Senin, 23 agustus 2023</li>
-                        <li class="list-group-item">host : host</li>
-                        <li class="list-group-item">harga : harga</li>
-                        <li class="list-group-item">CP : cp</li>
+                        <li class="list-group-item">waktu : {{ webinar.waktu }}</li>
+                        <li class="list-group-item">host : {{ webinar.host }}</li>
+                        <li class="list-group-item">harga : {{ webinar.harga }}</li>
+                        <li class="list-group-item">CP : {{ webinar.cp }}</li>
                     </ul>
                     <a href="#" class="btn btn-primary">Edit</a>
-                    <a href="#" class="btn btn-danger">Delete</a>
+                    <a href="#" @click="deleteWebinar(webinar.webinar_id)" class="btn btn-danger">Delete</a>
                 </div>
                 </div>
         </div>
@@ -274,11 +274,25 @@ import axios from "axios";
 export default {
   data() {
     return {
-      rows: [],
+      logindata: [],
+      webinars: [],
     };
   },
   mounted() {
     this.fetchProtectedData();
+    console.log("mounted");
+  },
+  watch: {
+    logindata: {
+      immediate: true, // Triggers the handler immediately after component creation
+      handler(newValue, oldValue) {
+        if (newValue) {
+            this.getWebinarsPenyelenggara(newValue);
+        } else {
+          console.log("logindata is undefined");
+        }
+      },
+    },
   },
   methods: {
     async fetchProtectedData() {
@@ -289,18 +303,60 @@ export default {
           },
         });
 
-        if (response.data) {
-        this.rows = response.data.rows;
-        console.log(this.rows);
+        console.log(response);
+        console.log(response.data.logindata);
+        if(response.data.logindata){
+            this.logindata = response.data.logindata.organisasi_id;
+            console.log(this.logindata);
+            
         } else {
-        console.error('Response data is undefined:', response);
+            console.error('logindata is undefined in response:', response);
         }
 
-        // this.message = response.data.message;
+        this.message = response.data.message;
       } catch (error) {
         console.error('Failed to fetch protected data:', error.response.data.error);
       }
     },
+
+    async logout() {
+        try {
+            localStorage.removeItem('token');
+            console.log('succesfully logged out');
+            this.$router.push('/');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    },
+
+    async getWebinarsPenyelenggara(organisasi_id) {
+    try {
+        const response = await axios.get(`/webinar_penyelenggara/${organisasi_id}`);
+        console.log(response);
+        this.webinars = response.data.payload;
+        console.log(this.webinars);
+    } catch (error) {
+        console.error('Error fetching webinars:', error);
+    }
+    },
+
+    async deleteWebinar(webinar_id) {
+    if (confirm('Apakah anda yakin ingin menghapus webinar ini?')) {
+        try {
+        const response = await axios.delete(`delwebinar/${webinar_id}`);
+        alert(response.data.message);
+        this.getWebinarsPenyelenggara();
+        } catch (error) {
+        if (error.response) {
+            if (error.response.status === 400) {
+            this.errorList = "error";
+            }
+        }
+        }
+    }
+    }
+
+
   },
 };
 </script>

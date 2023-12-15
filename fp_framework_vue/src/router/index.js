@@ -9,6 +9,8 @@ import Signup from '@/components/Signup.vue';
 import Dashboard from '@/components/dashboard.vue';
 import daftarWebinar from '@/components/daftarWebinar.vue'
 import addWebinar from '@/components/addWebinar.vue';
+import loginUser from '@/components/login_U.vue';
+import SignupUser from '@/components/Signup_U.vue';
 
 const routes = [
   {
@@ -61,6 +63,21 @@ const routes = [
     component: addWebinar,
     meta: { showHeader: true, showFooter: true },
   },
+  {
+    path: '/loginuser',
+    component: loginUser,
+    meta: { showHeader: true, showFooter: true },
+  },
+  {
+    path: '/signUpUser',
+    component: SignupUser,
+    meta: { showHeader: true, showFooter: true },
+  },
+  // {
+  //   path: '/editWebinar/:webinar_id/:organisasi_id',
+  //   name: 'editWebinar',
+  //   component: PlayerEdit
+  // },
   // Tambahkan rute lain jika diperlukan
 ];
 

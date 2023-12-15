@@ -56,7 +56,7 @@
         });
 
         //redirect ke loggin
-        this.$router.push('/login')
+        this.$router.push('/loginuser')
         // Handle registration logic here
         // Access form data with this.namaPenyelenggara, this.nomorTelpon, etc.
         // You can perform API calls or other registration processes

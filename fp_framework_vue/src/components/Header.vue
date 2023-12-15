@@ -26,7 +26,7 @@
           <li class="dropdown">
             <a href="#"><span>Login</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><router-link to="/login">Pengguna</router-link></li>
+              <li><router-link to="/loginuser">Pengguna</router-link></li>
               <li><router-link to="/login">Penyelenggara</router-link></li>
             </ul>
           </li>

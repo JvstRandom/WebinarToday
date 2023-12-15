@@ -93,17 +93,20 @@ app.get("/webinars-list-user/:user_id", (req, res) => {
 });
 
 app.get("/penyelenggara", (req, res) => {
+    console.log("halo");
     const sql = "SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi"
     db.query(sql, (err, result)=> {
         if (err) throw err;
-        response(200, result, "webinars get list", res)
+        return res.status(200).json({ result });
+        // response(200, result, "webinars get list", res)
     })
 })
+
 
 app.get("/penyelenggara/:organisasi_id", (req, res) => {
     const organisasi_id = req.params.organisasi_id;
     const sql = `SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi WHERE organisasi_id = ?`;
-
+    
     db.query(sql, [organisasi_id], (err, result) => {
         if (err) throw err;
         
@@ -118,9 +121,10 @@ app.get("/penyelenggara/:organisasi_id", (req, res) => {
 // buat registrasi penyelenggara
 app.post("/addOrganisasi", async ( req, res) => {
     const { namaOrganisasi, noTelp, email, website, password } = req.body;
+    const defaultRole = 'penyelenggara';
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${hashedPassword}')`; 
+    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password, role) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${hashedPassword}', '${defaultRole}')`
 
     console.log(req.body)
     db.query(sql, (err, result) => {
@@ -132,7 +136,7 @@ app.post("/addOrganisasi", async ( req, res) => {
     })
 })
 
-//login
+//login penyelenggara
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
 
@@ -151,16 +155,18 @@ app.post('/login', async (req, res) => {
             return response(402, "invalid password", "error", res);
         }
 
-        const token = jwt.sign({ organisasi_id: user.organisasi_id }, String(process.env.ACCESS_TOKEN_SECRET), {
+        const token = jwt.sign({ organisasi_id: user.organisasi_id, role: user.role }, String(process.env.ACCESS_TOKEN_SECRET), {
             expiresIn: 86400 //24h expired
         });
         return res.status(200).json({ token , rows});
     })
 })
 
-// protected web
-app.get('/protected', authenticationToken, (req, res) => {
-    res.status(200).json({ message: 'You have access to this protected route' });
+// protected route Penyelenggara
+app.get('/protected', authenticationToken, checkRole('penyelenggara'), (req, res) => {
+    const logindata = { organisasi_id: req.user.organisasi_id };
+    
+    res.status(200).json({ message: 'You have access to this protected route', logindata });
 })
 
 function authenticationToken(req, res, next) {
@@ -182,6 +188,16 @@ function authenticationToken(req, res, next) {
     })
 
 }
+
+function checkRole(role) {
+    return function(req, res, next) {
+      if (req.user.role === role) {
+        next(); // bisa masuk kalau rolenya sesuai
+      } else {
+        res.status(403).send('Unauthorized');
+      }
+    };
+  }
 
 // buat nampilin webinar penyelenggara sesuai id organisasinya
 app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
@@ -221,9 +237,13 @@ app.post('/addWebinar/:organisasi_id', upload.single('img'), (req, res) => {
 
 
 // registrasi pengguna
-app.post("/registerUser", (req, res) => {
+app.post("/registerUser", async (req, res) => {
     const { username, email, noTelp, password } = req.body;
-    const sql = `INSERT INTO user (username, email, noTelp, password) VALUES ('${username}', '${email}', '${noTelp}', '${password}')`;
+    const defaultRolee = 'user';
+    const hashedPasswordd = await bcrypt.hash(password, 10);
+
+    const sql = `INSERT INTO user (username, email, noTelp, password, role) VALUES ('${username}', '${email}', '${noTelp}', '${hashedPasswordd}', '${defaultRolee}')`
+
     // console.log(req.body)
     db.query(sql, (err, result) =>{
         // console.log(result)
@@ -232,6 +252,39 @@ app.post("/registerUser", (req, res) => {
             response(200, result.insertId, "Data Added Succesfully", res)
         }
     })
+})
+
+// login pengguna
+app.post('/loginUser', async (req, res) => {
+    const {email, password} = req.body;
+
+    db.query('SELECT * FROM user WHERE email = ?', [email], async (err, rows) => {
+        if (err) response(400, "invalid", "error", res);
+
+         if (rows.length === 0){
+            return response(401, "invalid email", "error", res);
+        } 
+
+        const user = rows[0];
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        
+        if (!passwordMatch) {
+            return response(402, "invalid password", "error", res);
+        }
+
+        const token = jwt.sign({ user_id: user.user_id, role: user.role }, String(process.env.ACCESS_TOKEN_SECRET), {
+            expiresIn: 86400 //24h expired
+        });
+        return res.status(200).json({ token , rows});
+    })
+})
+
+//protected route user
+app.get('/profileUser', authenticationToken, checkRole('user'), (req, res) => {
+    const loginUserData = { user_id: req.user.user_id };
+
+    res.status(200).json({ message: 'berhasil akses halaman user', loginUserData});
 })
 
 // daftar user ke webinar
@@ -275,6 +328,42 @@ app.get('/peserta/:webinar_id', (req, res) => {
 }) 
 
 // delete webinar
+app.delete("/delwebinar/:webinar_id", (req, res) => {
+    const webinar_id = req.params.webinar_id
+    const sql = `DELETE FROM webinar WHERE webinar_id = ${webinar_id}`
+    db.query(sql, (err, result) => {
+        if (err) response(400, "Error", "invalid", res)
+
+        if (result?.affectedRows){
+        const data = {
+            isDeleted: result.affectedRows
+        }
+        response(200, data, "Deleted Succesfully", res)
+        } else {
+            response(400, "Error", "not found", res)
+        }
+    })
+})
+
+// `UPDATE player SET Nama = '${Nama}', Team = '${Team}', Kategori = '${Kategori}' WHERE Player_id = ${Player_id}`
+
+// edit webinar
+app.put("/editWebinar/:webinar_id/:organisasi_id", (req, res) => {
+    const webinar_id = req.params.webinar_id;
+    const organisasi_id = req.params.organisasi_id;
+    const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body
+    const sql = `UPDATE webinar SET namaWebinar = '${namaWebinar}', Online = '${Online}', harga = '${harga}', sertif = '${sertif}', deskripsi = '${deskripsi}', lokasi = '${lokasi}', waktu = '${waktu}', cp = '${cp}', host = '${host}', organisasi_id = '${organisasi_id}' WHERE webinar_id = '${webinar_id}' `
+    db.query(sql, (err,result) => {
+        if (err) response(400, "invalid", "gagal", res);
+        if (result?.affectedRows) {
+            const data = {
+                isSuccess: result.affectedRows,
+                message: result.message,
+            }
+            response(200, data, "Data edit Succesfully", res)
+        }
+    })
+})
 
 // tampilan user sesuai user id
 app.get('/user/:user_id', (req, res)=> {
