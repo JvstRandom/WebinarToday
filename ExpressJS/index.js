@@ -74,7 +74,7 @@ app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
 });
 
 app.get("/webinars-list-user/:user_id", (req, res) => {
-    const user_id = req.params.organisasi_id;
+    const user_id = req.params.user_id;
 
     const sql = `
         SELECT *
@@ -366,13 +366,28 @@ app.put("/editWebinar/:webinar_id/:organisasi_id", (req, res) => {
 })
 
 // tampilan user sesuai user id
-app.get('/user/:user_id', (req, res)=> {
+// app.get('/user/:user_id', (req, res)=> {
+//     const user_id = req.params.user_id;
+
+//     const sql = `SELECT username, email, noTelp FROM user WHERE user_id = ${user_id}`
+
+//     db.query(sql, (err, result)=> {
+//         if (err) throw err;
+//         response(200, result, "user get list", res)
+//     })
+// })
+
+app.get("/user/:user_id", (req, res) => {
     const user_id = req.params.user_id;
+    const sql = `SELECT username, email, noTelp FROM user WHERE user_id = ?`;
 
-    const sql = `SELECT username, email, noTelp FROM user WHERE user_id = ${user_id}`
-
-    db.query(sql, (err, result)=> {
+    db.query(sql, [user_id], (err, result) => {
         if (err) throw err;
-        response(200, result, "user get list", res)
-    })
-})
+        
+        if (result.length > 0) {
+            response(200, result[0], "User details retrieved successfully", res);
+        } else {
+            response(404, null, "User not found", res);
+        }
+    });
+});
