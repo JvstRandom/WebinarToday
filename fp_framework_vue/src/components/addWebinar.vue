@@ -3,13 +3,14 @@
     <div class="main-body">
 
         <div class="row gutters-sm">
-          <h2>Webinar</h2>
+          <h2>
+            Webinar
+          </h2>
           <div class="col mb-3">
             <div class="card">
               <i class="fas fa-table me-1"></i>
               Insert Data Webinar
-            </div>
-            <div class="card-body">
+              <div class="card-body">
               <form @submit.prevent="submitForm">
                 <table class="table table-striped">
                   <tr>
@@ -71,6 +72,12 @@
                     </td>
                   </tr>
                   <tr>
+                    <th>Upload Image Webinar </th>
+                  </tr>
+                  <tr>
+                    <td><input type="file" @change="handleFileChange" class="input-group mb-3" accept="image/*" required></td>
+                  </tr>
+                  <tr>
                     <th>Deskripsi </th>
                   </tr>
                   <tr>
@@ -86,6 +93,7 @@
                   </tr>
                 </table>
               </form>
+              </div>
             </div>
           </div>
         </div>
@@ -96,7 +104,7 @@
   
   <script>
   import axios from 'axios';
-
+  
   export default {
     data() {
       return {
@@ -109,31 +117,70 @@
           waktu: '',
           lokasi: '',
           cp: 0,
-          host: ''
-        }
+          host: '',
+          img: null,
+        },
       };
     },
     methods: {
+      handleFileChange(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+  
+        reader.onloadend = () => {
+          // Set the formData.img to the uploaded image data
+          this.formData.img = reader.result;
+        };
+  
+        if (file) {
+          reader.readAsDataURL(file);
+        }
+      },
+  
       submitForm() {
-        // Kirim data ke API menggunakan Axios
-        const organisasi_id = 1; // Ganti dengan organisasi_id yang sesuai
-        const apiUrl = `/addWebinar/${organisasi_id}`;
-
-        axios.post(apiUrl, this.formData)
+        // Send data to the API using Axios
+        const organisasi_id = 1; // Replace with the appropriate organisasi_id
+        const apiUrl = `http://localhost:8000/addWebinar/${organisasi_id}`;
+  
+        const formData = new FormData();
+        formData.append('img', this.dataURItoBlob(this.formData.img), 'webinar-image.jpg'); // Convert data URI to Blob
+        formData.append('namaWebinar', this.formData.namaWebinar);
+        formData.append('Online', this.formData.Online);
+        formData.append('sertif', this.formData.sertif);
+        formData.append('harga', this.formData.harga);
+        formData.append('deskripsi', this.formData.deskripsi);
+        formData.append('waktu', this.formData.waktu);
+        formData.append('lokasi', this.formData.lokasi);
+        formData.append('cp', this.formData.cp);
+        formData.append('host', this.formData.host);
+  
+        axios
+          .post(apiUrl, formData)
           .then(response => {
             console.log('Response from server:', response.data);
-            // Tambahkan logika lainnya setelah mendapatkan respons dari server
-            // Navigasi kembali ke menu /profile-penyelenggara setelah post berhasil
+            // Add other logic after receiving a response from the server
+            // Navigate back to the /profile-penyelenggara menu after a successful post
             this.$router.push('/profile-penyelenggara');
           })
           .catch(error => {
             console.error('Error submitting form:', error);
             // Handle error
           });
-      }
-    }
+      },
+  
+      // Convert data URI to Blob
+      dataURItoBlob(dataURI) {
+        const byteString = atob(dataURI.split(',')[1]);
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([ab], { type: 'image/jpeg' }); // Adjust the type based on your image format
+      },
+    },
   };
-</script>
+  </script>
   
   <style>
   /* Tambahkan gaya sesuai kebutuhan */

@@ -243,7 +243,7 @@
       return {
         webinarList: [], // Change to an array to store multiple webinars
         organisasi: {},
-        itemsPerPage: 4,
+        itemsPerPage: 6,
         currentPage: 1,
         status: null, // Tambahkan status
         message: '', // Tambahkan pesan
@@ -269,18 +269,21 @@
       getImageUrl(blobData) {
         console.log('Blob Data:', blobData);
 
-        // Extract actual data from Proxy
-        const bufferData = blobData.data || [];
-
-        // Convert Buffer data to Uint8Array
-        const uint8Array = new Uint8Array(bufferData);
-
-        if (uint8Array.length > 0) {
-          const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
-          return URL.createObjectURL(blob);
-        } else {
-          return ''; // or set a default image URL
+        // Check if blobData is an object with a data property
+        if (blobData && blobData.data) {
+          // Extract actual data from Proxy
+          const bufferData = blobData.data || [];
+        
+          // Convert Buffer data to Uint8Array
+          const uint8Array = new Uint8Array(bufferData);
+        
+          if (uint8Array.length > 0) {
+            const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
+            return URL.createObjectURL(blob);
+          }
         }
+      
+        return ''; // or set a default image URL
       },
 
       async submitForm() {

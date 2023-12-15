@@ -9,17 +9,28 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const secretKey = '161fc85f535615e1b630c59fe4f9d54cfe0dd824a174455f2aefd46fca9b69a1';
-
-app.use(bodyParser.json())
-
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    next();
-})
+const multer = require('multer');
 
 app.use(cors());
+app.use(bodyParser.json({limit: '5000kb'}))
+
+
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+//     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//     next();
+// })
+
+
+
+// Use multer for handling file uploads
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 }, // Set the file size limit to 10 MB
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
@@ -54,6 +65,25 @@ app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     `;
 
     db.query(sql, [organisasi_id], (err, result) => {
+        if (err) {
+            response(500, "error", "Internal Server Error", res);
+        } else {
+            response(200, result, "Webinars retrieved successfully", res);
+        }
+    });
+});
+
+app.get("/webinars-list-user/:user_id", (req, res) => {
+    const user_id = req.params.organisasi_id;
+
+    const sql = `
+        SELECT *
+        FROM webinar
+        WHERE user_id = ?
+        ORDER BY waktu DESC
+    `;
+
+    db.query(sql, [user_id], (err, result) => {
         if (err) {
             response(500, "error", "Internal Server Error", res);
         } else {
@@ -163,21 +193,32 @@ app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
    })
 })
 
-// buat nambah webinar sesuai dengan organisasi id
-app.post("/addWebinar/:organisasi_id", (req, res) => {
+// Define the route for adding a webinar
+app.post('/addWebinar/:organisasi_id', upload.single('img'), (req, res) => {
+    console.log('Incoming request body:', req.body);
     const organisasi_id = req.params.organisasi_id;
+    const formData = req.body;
+
+    // Check if req.file is available before accessing its properties
+    if (req.file && req.file.buffer) {
+        formData.img = req.file.buffer;
+    }
+
     const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body;
-    const sql = `INSERT INTO webinar (namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id) VALUES 
-    ('${namaWebinar}', '${Online}', '${harga}', '${sertif}', '${deskripsi}', '${lokasi}', '${waktu}', '${cp}', '${host}', '${organisasi_id}')`;
-    // console.log(req.body)
-    db.query(sql, (err, result)=>{
-        // console.log(result);
-        if (err) response(400, "invalid", "error", res);
-        if (result?.affectedRows) {
-            response(200, result.insertId, "Data Added Succesfully", res)
+    const sql = `INSERT INTO webinar (img, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [formData.img, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            return response(400, "invalid", "error", res);
         }
-    })
-})
+        if (result?.affectedRows) {
+            response(200, result.insertId, "Data Added Successfully", res)
+        }
+    });
+});
+
 
 // registrasi pengguna
 app.post("/registerUser", (req, res) => {
