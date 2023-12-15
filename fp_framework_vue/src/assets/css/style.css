@@ -115,6 +115,9 @@ h6 {
   #header .logo h1 {
     font-size: 28px;
   }
+  .humberger{
+    display: none;
+  }
 }
 
 #header .logo h1 a,
@@ -241,6 +244,9 @@ h6 {
   .navbar .dropdown .dropdown:hover>ul {
     left: -100%;
   }
+  .humberger{
+    display: none;
+  }
 }
 
 /**
@@ -260,12 +266,12 @@ h6 {
 }
 
 @media (max-width: 991px) {
-  .mobile-nav-toggle {
-    display: block;
+  .humberger {
+    display: none;
   }
 
   .navbar ul {
-    display: none;
+    display: block;
   }
 }
 
@@ -368,6 +374,9 @@ h6 {
   #hero {
     padding: 100px 0 20px 0;
   }
+  .humbberger{
+    padding-right: 15px;
+  }
 }
 
 #hero .hero-img {
@@ -394,6 +403,9 @@ h6 {
     float: none;
     margin: auto;
     text-align: center;
+  }
+  .humberger{
+    display: none;
   }
 }
 
@@ -544,7 +556,7 @@ section {
   content: "/";
 }
 
-@media (max-width: 768px) {
+@media (max-width: 968px) {
   .breadcrumbs .d-flex {
     display: block !important;
   }
@@ -555,6 +567,10 @@ section {
 
   .breadcrumbs ol li {
     display: inline-block;
+  }
+
+  .humberger{
+    display: block;
   }
 }
 

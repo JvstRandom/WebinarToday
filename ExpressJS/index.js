@@ -9,17 +9,28 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const secretKey = '161fc85f535615e1b630c59fe4f9d54cfe0dd824a174455f2aefd46fca9b69a1';
-
-app.use(bodyParser.json())
-
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-    next();
-})
+const multer = require('multer');
 
 app.use(cors());
+app.use(bodyParser.json({limit: '5000kb'}))
+
+
+// app.use((req, res, next) => {
+//     res.setHeader("Access-Control-Allow-Origin", "*");
+//     res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
+//     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+//     next();
+// })
+
+
+
+// Use multer for handling file uploads
+const storage = multer.memoryStorage();
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 * 5 }, // Set the file size limit to 10 MB
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
@@ -62,18 +73,40 @@ app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     });
 });
 
+app.get("/webinars-list-user/:user_id", (req, res) => {
+    const user_id = req.params.organisasi_id;
+
+    const sql = `
+        SELECT *
+        FROM webinar
+        WHERE user_id = ?
+        ORDER BY waktu DESC
+    `;
+
+    db.query(sql, [user_id], (err, result) => {
+        if (err) {
+            response(500, "error", "Internal Server Error", res);
+        } else {
+            response(200, result, "Webinars retrieved successfully", res);
+        }
+    });
+});
+
 app.get("/penyelenggara", (req, res) => {
+    console.log("halo");
     const sql = "SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi"
     db.query(sql, (err, result)=> {
         if (err) throw err;
-        response(200, result, "webinars get list", res)
+        return res.status(200).json({ result });
+        // response(200, result, "webinars get list", res)
     })
 })
+
 
 app.get("/penyelenggara/:organisasi_id", (req, res) => {
     const organisasi_id = req.params.organisasi_id;
     const sql = `SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi WHERE organisasi_id = ?`;
-
+    
     db.query(sql, [organisasi_id], (err, result) => {
         if (err) throw err;
         
@@ -88,9 +121,10 @@ app.get("/penyelenggara/:organisasi_id", (req, res) => {
 // buat registrasi penyelenggara
 app.post("/addOrganisasi", async ( req, res) => {
     const { namaOrganisasi, noTelp, email, website, password } = req.body;
+    const defaultRole = 'penyelenggara';
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${hashedPassword}')`; 
+    const sql = `INSERT INTO organisasi (namaOrganisasi, noTelp, email, website, password, role) VALUES ('${namaOrganisasi}', '${noTelp}', '${email}', '${website}', '${hashedPassword}', '${defaultRole}')`
 
     console.log(req.body)
     db.query(sql, (err, result) => {
@@ -102,7 +136,7 @@ app.post("/addOrganisasi", async ( req, res) => {
     })
 })
 
-//login
+//login penyelenggara
 app.post('/login', async (req, res) => {
     const {email, password} = req.body;
 
@@ -121,16 +155,18 @@ app.post('/login', async (req, res) => {
             return response(402, "invalid password", "error", res);
         }
 
-        const token = jwt.sign({ organisasi_id: user.organisasi_id }, String(process.env.ACCESS_TOKEN_SECRET), {
+        const token = jwt.sign({ organisasi_id: user.organisasi_id, role: user.role }, String(process.env.ACCESS_TOKEN_SECRET), {
             expiresIn: 86400 //24h expired
         });
         return res.status(200).json({ token , rows});
     })
 })
 
-// protected web
-app.get('/protected', authenticationToken, (req, res) => {
-    res.status(200).json({ message: 'You have access to this protected route' });
+// protected route Penyelenggara
+app.get('/protected', authenticationToken, checkRole('penyelenggara'), (req, res) => {
+    const logindata = { organisasi_id: req.user.organisasi_id };
+    
+    res.status(200).json({ message: 'You have access to this protected route', logindata });
 })
 
 function authenticationToken(req, res, next) {
@@ -153,6 +189,16 @@ function authenticationToken(req, res, next) {
 
 }
 
+function checkRole(role) {
+    return function(req, res, next) {
+      if (req.user.role === role) {
+        next(); // bisa masuk kalau rolenya sesuai
+      } else {
+        res.status(403).send('Unauthorized');
+      }
+    };
+  }
+
 // buat nampilin webinar penyelenggara sesuai id organisasinya
 app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
    const organisasi_id = req.params.organisasi_id;
@@ -163,26 +209,41 @@ app.get("/webinar_penyelenggara/:organisasi_id", (req,res) => {
    })
 })
 
-// buat nambah webinar sesuai dengan organisasi id
-app.post("/addWebinar/:organisasi_id", (req, res) => {
+// Define the route for adding a webinar
+app.post('/addWebinar/:organisasi_id', upload.single('img'), (req, res) => {
+    console.log('Incoming request body:', req.body);
     const organisasi_id = req.params.organisasi_id;
+    const formData = req.body;
+
+    // Check if req.file is available before accessing its properties
+    if (req.file && req.file.buffer) {
+        formData.img = req.file.buffer;
+    }
+
     const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body;
-    const sql = `INSERT INTO webinar (namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id) VALUES 
-    ('${namaWebinar}', '${Online}', '${harga}', '${sertif}', '${deskripsi}', '${lokasi}', '${waktu}', '${cp}', '${host}', '${organisasi_id}')`;
-    // console.log(req.body)
-    db.query(sql, (err, result)=>{
-        // console.log(result);
-        if (err) response(400, "invalid", "error", res);
-        if (result?.affectedRows) {
-            response(200, result.insertId, "Data Added Succesfully", res)
+    const sql = `INSERT INTO webinar (img, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [formData.img, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            return response(400, "invalid", "error", res);
         }
-    })
-})
+        if (result?.affectedRows) {
+            response(200, result.insertId, "Data Added Successfully", res)
+        }
+    });
+});
+
 
 // registrasi pengguna
-app.post("/registerUser", (req, res) => {
+app.post("/registerUser", async (req, res) => {
     const { username, email, noTelp, password } = req.body;
-    const sql = `INSERT INTO user (username, email, noTelp, password) VALUES ('${username}', '${email}', '${noTelp}', '${password}')`;
+    const defaultRolee = 'user';
+    const hashedPasswordd = await bcrypt.hash(password, 10);
+
+    const sql = `INSERT INTO user (username, email, noTelp, password, role) VALUES ('${username}', '${email}', '${noTelp}', '${hashedPasswordd}', '${defaultRolee}')`
+
     // console.log(req.body)
     db.query(sql, (err, result) =>{
         // console.log(result)
@@ -191,6 +252,39 @@ app.post("/registerUser", (req, res) => {
             response(200, result.insertId, "Data Added Succesfully", res)
         }
     })
+})
+
+// login pengguna
+app.post('/loginUser', async (req, res) => {
+    const {email, password} = req.body;
+
+    db.query('SELECT * FROM user WHERE email = ?', [email], async (err, rows) => {
+        if (err) response(400, "invalid", "error", res);
+
+         if (rows.length === 0){
+            return response(401, "invalid email", "error", res);
+        } 
+
+        const user = rows[0];
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        
+        if (!passwordMatch) {
+            return response(402, "invalid password", "error", res);
+        }
+
+        const token = jwt.sign({ user_id: user.user_id, role: user.role }, String(process.env.ACCESS_TOKEN_SECRET), {
+            expiresIn: 86400 //24h expired
+        });
+        return res.status(200).json({ token , rows});
+    })
+})
+
+//protected route user
+app.get('/profileUser', authenticationToken, checkRole('user'), (req, res) => {
+    const loginUserData = { user_id: req.user.user_id };
+
+    res.status(200).json({ message: 'berhasil akses halaman user', loginUserData});
 })
 
 // daftar user ke webinar
@@ -234,6 +328,42 @@ app.get('/peserta/:webinar_id', (req, res) => {
 }) 
 
 // delete webinar
+app.delete("/delwebinar/:webinar_id", (req, res) => {
+    const webinar_id = req.params.webinar_id
+    const sql = `DELETE FROM webinar WHERE webinar_id = ${webinar_id}`
+    db.query(sql, (err, result) => {
+        if (err) response(400, "Error", "invalid", res)
+
+        if (result?.affectedRows){
+        const data = {
+            isDeleted: result.affectedRows
+        }
+        response(200, data, "Deleted Succesfully", res)
+        } else {
+            response(400, "Error", "not found", res)
+        }
+    })
+})
+
+// `UPDATE player SET Nama = '${Nama}', Team = '${Team}', Kategori = '${Kategori}' WHERE Player_id = ${Player_id}`
+
+// edit webinar
+app.put("/editWebinar/:webinar_id/:organisasi_id", (req, res) => {
+    const webinar_id = req.params.webinar_id;
+    const organisasi_id = req.params.organisasi_id;
+    const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body
+    const sql = `UPDATE webinar SET namaWebinar = '${namaWebinar}', Online = '${Online}', harga = '${harga}', sertif = '${sertif}', deskripsi = '${deskripsi}', lokasi = '${lokasi}', waktu = '${waktu}', cp = '${cp}', host = '${host}', organisasi_id = '${organisasi_id}' WHERE webinar_id = '${webinar_id}' `
+    db.query(sql, (err,result) => {
+        if (err) response(400, "invalid", "gagal", res);
+        if (result?.affectedRows) {
+            const data = {
+                isSuccess: result.affectedRows,
+                message: result.message,
+            }
+            response(200, data, "Data edit Succesfully", res)
+        }
+    })
+})
 
 // tampilan user sesuai user id
 app.get('/user/:user_id', (req, res)=> {

@@ -1,5 +1,6 @@
 <template>
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+  <div>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
   <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex justify-content-between">
       <div class="logo">
@@ -12,8 +13,6 @@
         <ul>
           <li><router-link to="/search">Webinar</router-link></li>
           <li><router-link to="/tentang-kami">Tentang Kami</router-link></li>
-          <li><router-link to="/layanan">Layanan</router-link></li>
-          <li><router-link to="/search">WebinarToday</router-link></li>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
           <li class="dropdown">
             <a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
@@ -26,7 +25,7 @@
           <li class="dropdown">
             <a href="#"><span>Login</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><router-link to="/login">Pengguna</router-link></li>
+              <li><router-link to="/login_u">Pengguna</router-link></li>
               <li><router-link to="/login">Penyelenggara</router-link></li>
             </ul>
           </li>
@@ -35,6 +34,7 @@
       </nav>
     </div>
   </header>
+  </div>
 </template>
 
 <script>
