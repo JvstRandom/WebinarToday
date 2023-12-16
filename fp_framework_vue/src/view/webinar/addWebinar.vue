@@ -6,13 +6,13 @@
           <h2>
             Webinar
           </h2>
-          <div class="col mb-3">
+          <div class="col mb-3 mt-3">
             <div class="card">
               <i class="fas fa-table me-1"></i>
               Insert Data Webinar
               <div class="card-body">
-              <form @submit.prevent="submitForm">
-                <table class="table table-striped">
+                <form @submit.prevent="submitForm">
+                  <table class="table table-striped">
                   <tr>
                     <th>Nama Webinar </th>
                   </tr>
@@ -91,8 +91,8 @@
                     </th>
 
                   </tr>
-                </table>
-              </form>
+                  </table>
+                </form>
               </div>
             </div>
           </div>

@@ -73,28 +73,7 @@ app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     });
 });
 
-app.get("/webinars-list-user/:user_id", (req, res) => {
-<<<<<<< HEAD
-    const user_id = req.params.organisasi_id;
-=======
-    const user_id = req.params.user_id;
->>>>>>> 3cb3cd0a676c2c9df16ce0993f0d354b7d09c8e6
 
-    const sql = `
-        SELECT *
-        FROM webinar
-        WHERE user_id = ?
-        ORDER BY waktu DESC
-    `;
-
-    db.query(sql, [user_id], (err, result) => {
-        if (err) {
-            response(500, "error", "Internal Server Error", res);
-        } else {
-            response(200, result, "Webinars retrieved successfully", res);
-        }
-    });
-});
 
 app.get("/penyelenggara", (req, res) => {
     console.log("halo");
@@ -310,7 +289,26 @@ app.post('/daftarWebinar/:user_id/:webinar_id', (req, res) => {
 })
 
 // tampilan webinar list menurut like dan user_id
-
+app.get('/webinars-list-user/:user_id', (req, res) => {
+    const user_id = req.params.user_id;
+  
+    const query = `
+      SELECT w.*
+      FROM user u
+      JOIN user_order o ON u.user_id = o.user_id
+      JOIN webinar w ON o.webinar_id = w.webinar_id
+      WHERE u.user_id = ?
+    `;
+  
+    db.query(query, [user_id], (err, result) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        res.status(200).json({ payload: result, message: 'Webinars retrieved successfully' });
+      }
+    });
+  });
 
 // tampilan user list menurut webinar id atau tampilan order
 app.get('/peserta/:webinar_id', (req, res) => {
@@ -395,3 +393,54 @@ app.get("/user/:user_id", (req, res) => {
         }
     });
 });
+
+app.put('/users/:user_id', async (req, res) => {
+    const user_id = req.params.user_id;
+    const { username, email, noTelp, password, role } = req.body;
+  
+    try {
+      // Check if the user exists
+      const userExist = await db.query('SELECT * FROM user WHERE user_id = ?', [user_id]);
+  
+      if (userExist.length === 0) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      // Update user data
+      await db.query(
+        'UPDATE user SET username = ?, email = ?, noTelp = ?, password = ?, role = ? WHERE user_id = ?',
+        [username, email, noTelp, password, role, user_id]
+      );
+  
+      return res.status(200).json({ success: true, message: 'User updated successfully' });
+    } catch (error) {
+      console.error('Error updating user:', error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  });
+
+
+  app.put('/organisasi/:organisasi_id', async (req, res) => {
+    const organisasi_id = req.params.organisasi_id;
+    const { namaOrganisasi, noTelp, email, website, password, role } = req.body;
+  
+    try {
+      // Check if the organisasi exists
+      const organisasiExist = await db.query('SELECT * FROM organisasi WHERE organisasi_id = ?', [organisasi_id]);
+  
+      if (organisasiExist.length === 0) {
+        return res.status(404).json({ success: false, message: 'Organisasi not found' });
+      }
+  
+      // Update organisasi data
+      await db.query(
+        'UPDATE organisasi SET namaOrganisasi = ?, noTelp = ?, email = ?, website = ?, password = ?, role = ? WHERE organisasi_id = ?',
+        [namaOrganisasi, noTelp, email, website, password, role, organisasi_id]
+      );
+  
+      return res.status(200).json({ success: true, message: 'Organisasi updated successfully' });
+    } catch (error) {
+      console.error('Error updating organisasi:', error);
+      return res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  });

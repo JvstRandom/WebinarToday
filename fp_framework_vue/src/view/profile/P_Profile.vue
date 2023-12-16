@@ -116,7 +116,7 @@
                           <hr>
                           <div class="row">
                             <div class="col-sm-12">
-                              <router-link to="/profile-penyelenggara" class="btn btn-info">Edit</router-link>
+                              <router-link to="/editpenyelenggara" class="btn btn-info">Edit</router-link>
                             </div>
                           </div>
                       </div>

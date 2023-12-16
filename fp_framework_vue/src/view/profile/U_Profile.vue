@@ -27,11 +27,11 @@
                         <div class="d-flex flex-column align-items-center text-center">
                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                           <div class="mt-3">
-                            <!-- <h4>{{ organisasi.namaOrganisasi }}</h4> -->
-                            <p class="text-secondary mb-1">Full Stack Developer</p>
+                            <h4>{{ user.username }}</h4>
+                            <!-- <p class="text-secondary mb-1">Full Stack Developer</p>
                             <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
                             <button class="btn btn-primary">Follow</button>
-                            <button class="btn btn-outline-primary">Message</button>
+                            <button class="btn btn-outline-primary">Message</button> -->
                           </div>
                         </div>
                       </div>
@@ -77,13 +77,13 @@
                             </div>
                           </div> -->
                           <!-- Link social media -->
-                          <hr>
+                          <!-- <hr>
                           <div class="row">
                             <div class="col-sm-3">
                               <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
                             </div>
                             <div class="col-sm-9">
-                              <!-- <span class="text-secondary">{{ user.website }}</span> -->
+                              <span class="text-secondary">{{ user.website }}</span>
                             </div>
                           </div>
                           <hr>
@@ -112,11 +112,11 @@
                             <div class="col-sm-9">
                               <span class="text-secondary"></span>
                             </div>
-                          </div>
+                          </div> -->
                           <hr>
                           <div class="row">
                             <div class="col-sm-12">
-                              <router-link to="/profile-penyelenggara" class="btn btn-info">Edit</router-link>
+                              <router-link to="/edituser" class="btn btn-info">Edit</router-link>
                             </div>
                           </div>
                       </div>
@@ -161,11 +161,11 @@
                     <div class="row">
                       <hr>
                       <div class="col-sm"> 
-                        <h6 class="d-flex align-items-center mb-3">List Webinar:</h6>
+                        <h6 class="d-flex align-items-center mb-3">Webinar yang Anda Ikuti :</h6>
                       </div>
-                      <div class="col-sm text-end">
+                      <!-- <div class="col-sm text-end">
                         <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link>
-                      </div>
+                      </div> -->
                     </div>
                     <hr>
 
@@ -241,10 +241,8 @@
     },
     data() {
       return {
-        displayedWebinars: [],
         webinarList: [],
-        userList: [], // Ubah dari webinarList menjadi userList
-        user: {}, // Ubah dari organisasi menjadi user
+        user: {},
         itemsPerPage: 6,
         currentPage: 1,
         status: null,
@@ -256,11 +254,9 @@
       this.fetchUserData();
     },
     computed: {
-      // Calculate total pages based on the number of webinars and items per page
       totalPages() {
         return Math.ceil(this.webinarList.length / this.itemsPerPage);
       },
-      // Calculate the array of webinars to display on the current page
       displayedWebinars() {
         const startIndex = (this.currentPage - 1) * this.itemsPerPage;
         const endIndex = startIndex + this.itemsPerPage;
@@ -298,22 +294,20 @@
 
       async fetchUserData() {
         try {
-          // Assume you have the organisasi_id from the logged-in penyelenggara
-          const user_id = 1; // Replace with the actual organisasi_id
+          // Dapatkan user_id dari penyelenggara yang sedang login
+          const user_id = 201; // Ganti dengan user_id yang sesuai
 
-          // Make a request to fetch organisasi data
-          const userResponse = await axios.get(`http://localhost:8000/user/${organisasi_id}`);
-          console.log('Organisasi API Response:', userResponse.data);
+          // Ambil data user
+          const userResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
+          console.log('User API Response:', userResponse.data);
 
-          // Check if the response has the expected structure
           if (userResponse.data && userResponse.data.payload) {
             this.user = userResponse.data.payload;
 
-            // Make another request to fetch webinars based on organisasi_id
-            const webinarsResponse = await axios.get(`http://localhost:8000/webinars-list-user/${organisasi_id}`);
+            // Ambil data webinars berdasarkan user_id
+            const webinarsResponse = await axios.get(`http://localhost:8000/webinars-list-user/${user_id}`);
             console.log('Webinars API Response:', webinarsResponse.data);
 
-            // Check if the response has the expected structure
             if (webinarsResponse.data && webinarsResponse.data.payload) {
               this.webinarList = webinarsResponse.data.payload;
             }

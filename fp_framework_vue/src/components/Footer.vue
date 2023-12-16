@@ -38,19 +38,12 @@
             </div>
           </div>
 
-<<<<<<< HEAD
-          <div class="col-lg-3 col-md-6 footer-newsletter">
-            <h4>Our Newsletter</h4>
-            <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna veniam enim veniam illum dolore legam minim quorum culpa amet magna export quem marada parida nodela caramase seza.</p>
-
-=======
           <div class="col-lg-3 footer-newsletter">
             <h4 style="margin-bottom: 5px; margin-top: 10px;">Our Newsletter</h4>
             <p  style="text-align: justify; margin-right: 20px; color: white;">Bergabunglah bersama kami dan dapatkan akses eksklusif ke informasi terbaru, update acara, serta berita dan artikel menarik.</p>
             <form action="" method="post">
               <input type="email" name="email" /><input type="submit" value="Subscribe" />
             </form>
->>>>>>> 3cb3cd0a676c2c9df16ce0993f0d354b7d09c8e6
           </div>
 
         </div>
@@ -59,11 +52,7 @@
 
     <div class="container">
       <div class="copyright">
-<<<<<<< HEAD
-        &copy; Copyright <strong>WebinarToDay</strong>. All Rights Reserved
-=======
         &copy; Copyright <strong>WebinarToday</strong>. All Rights Reserved
->>>>>>> 3cb3cd0a676c2c9df16ce0993f0d354b7d09c8e6
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. You can delete the links only if you purchased the pro version. Licensing information: https://bootstrapmade.com/license/ Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=NewBiz -->
