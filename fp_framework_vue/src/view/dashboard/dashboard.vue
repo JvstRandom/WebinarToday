@@ -221,6 +221,12 @@
         </div>
 
         <h2>List Webinar Anda</h2>
+        <div class="align-self-end ml-auto">
+            <Button @click.prevent="navigateToAddWebinar" class="w-100 btn btn-lg btn-outline-primary">
+                Tambah Webinar
+            </Button> 
+        </div>
+        
         <div class="webinar-cont">
             <div class="card" v-for="(webinar, index) in this.webinars" :key="index">
                 
@@ -320,6 +326,15 @@ export default {
       } catch (error) {
         console.error('Failed to fetch protected data:', error.response.data.error);
       }
+    },
+
+    navigateToAddWebinar() {
+        // Fetch login data before navigating
+        this.fetchProtectedData().then(() => {
+        // Navigate to AddWebinar with logindata
+        console.log('ini navigate:', this.logindata);
+        this.$router.push(`/addwebinar/${this.logindata}`);
+        });
     },
 
     async logout() {

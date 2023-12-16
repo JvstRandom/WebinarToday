@@ -73,7 +73,24 @@ app.get("/webinars-list-penyelenggara/:organisasi_id", (req, res) => {
     });
 });
 
+app.get("/webinars-list-user/:user_id", (req, res) => {
+    const user_id = req.params.user_id;
 
+    const sql = `
+        SELECT *
+        FROM webinar
+        WHERE user_id = ?
+        ORDER BY waktu DESC
+    `;
+
+    db.query(sql, [user_id], (err, result) => {
+        if (err) {
+            response(500, "error", "Internal Server Error", res);
+        } else {
+            response(200, result, "Webinars retrieved successfully", res);
+        }
+    });
+});
 
 app.get("/penyelenggara", (req, res) => {
     console.log("halo");

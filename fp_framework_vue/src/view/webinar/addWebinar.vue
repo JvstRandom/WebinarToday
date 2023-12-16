@@ -11,8 +11,8 @@
               <i class="fas fa-table me-1"></i>
               Insert Data Webinar
               <div class="card-body">
-                <form @submit.prevent="submitForm">
-                  <table class="table table-striped">
+              <form @submit.prevent="submitForm($route.params.organisasi_id)">
+                <table class="table table-striped">
                   <tr>
                     <th>Nama Webinar </th>
                   </tr>
@@ -52,13 +52,13 @@
                     <th>Harga </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.harga" type="number" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.harga" type="text" class="input-group mb-3" required></td>
                   </tr>
                   <tr>
                     <th>cp </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.cp" type="number" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.cp" type="text" class="input-group mb-3" required></td>
                   </tr>
                   <tr>
                     <th>sertif </th>
@@ -87,7 +87,7 @@
                     <th>
                       <input type="submit" class="btn btn-success" value="SIMPAN"> 
                       &nbsp;&nbsp;&nbsp;
-                      <router-link to="/profile-penyelenggara" class="btn btn-info">Kembali</router-link>
+                      <router-link to="/profile-penyelenggara" class="btn btn-primary">Kembali</router-link>
                     </th>
 
                   </tr>
@@ -122,6 +122,13 @@
         },
       };
     },
+
+    created() {
+      const organisasi_id = this.$route.params.organisasi_id;
+
+      console.log('Organisasi ID:', organisasi_id);
+    },
+
     methods: {
       handleFileChange(event) {
         const file = event.target.files[0];
@@ -137,9 +144,9 @@
         }
       },
   
-      submitForm() {
+      submitForm(organisasi_id) {
         // Send data to the API using Axios
-        const organisasi_id = 1; // Replace with the appropriate organisasi_id
+         // Replace with the appropriate organisasi_id
         const apiUrl = `http://localhost:8000/addWebinar/${organisasi_id}`;
   
         const formData = new FormData();

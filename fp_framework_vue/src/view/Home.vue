@@ -11,96 +11,81 @@
                 <Tentang />
             </div>
 
-            <!-- ======= Services Section ======= -->
+            <!-- ======= Tawaran Layanan Post Webinar Section ======= -->
             <section id="services" class="section-bg">
                 <div class="container" data-aos="fade-up">
                     <header class="section-header">
-                        <h3>Services</h3>
+                        <h3>Tawaran Kami</h3>
                         <p>
-                            Laudem latine persequeris id sed, ex fabulas delectus quo. No vel
-                            partiendo abhorreant vituperatoribus.
+                            Kami menyediakan paket layanan bagi para penyelenggara webinar berikut diantaranya:
                         </p>
                     </header>
 
                     <div class="row justify-content-center">
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-briefcase" style="color: #ff689b"></i>
+                        <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                            <div class="col">
+                                <div class="card mb-4 rounded-3 shadow-sm">
+                                <div class="card-header py-3">
+                                    <h4 class="my-0 fw-normal">Free Trial</h4>
                                 </div>
-                                <h4 class="title"><a href="">Lorem Ipsum</a></h4>
-                                <p class="description">
-                                    Voluptatum deleniti atque corrupti quos dolores et quas
-                                    molestias excepturi sint occaecati cupiditate non provident
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-card-checklist" style="color: #e9bf06"></i>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">Rp0<small class="text-body-secondary fw-light">/mo</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                    <li>1 webinar included</li>
+                                    <li>low chance of appearing in top</li>
+                                    <li>no Email support</li>
+                                    <li>Dashboard access</li>
+                                    </ul>
+                                    <RouterLink :to="{path:'/sign-up'}" class="w-100 btn btn-lg btn-outline-primary">
+                                        Sign up for free
+                                    </RouterLink> 
                                 </div>
-                                <h4 class="title"><a href="">Dolor Sitema</a></h4>
-                                <p class="description">
-                                    Minim veniam, quis nostrud exercitation ullamco laboris nisi
-                                    ut aliquip ex ea commodo consequat tarad limino ata
-                                </p>
+                                </div>
                             </div>
-                        </div>
+                            <div class="col">
+                                <div class="card mb-4 rounded-3 shadow-sm">
+                                <div class="card-header py-3">
+                                    <h4 class="my-0 fw-normal">Pro</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">Rp100k<small class="text-body-secondary fw-light">/mo</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                    <li>10 webinars included</li>
+                                    <li>more chance of appearing in top</li>
+                                    <li>no Email support</li>
+                                    <li>Dashboard access</li>
+                                    </ul>
+                                    <RouterLink :to="{path:'/sign-up'}" class="w-100 btn btn-lg btn-primary">
+                                        Get started
+                                    </RouterLink> 
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card mb-4 rounded-3 shadow-sm border-primary">
+                                <div class="card-header py-3 text-bg-primary border-primary">
+                                    <h4 class="my-0 fw-normal">Enterprise</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h1 class="card-title pricing-card-title">Rp210k<small class="text-body-secondary fw-light">/mo</small></h1>
+                                    <ul class="list-unstyled mt-3 mb-4">
+                                    <li>100 webinars included</li>
+                                    <li>high chance of appearing in top</li>
+                                    <li>Email support</li>
+                                    <li>Dashboard access</li>
+                                    </ul>
 
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-bar-chart" style="color: #3fcdc7"></i>
+                                    <RouterLink :to="{path:'/sign-up'}" class="w-100 btn btn-lg btn-primary">
+                                        Get started
+                                    </RouterLink> 
                                 </div>
-                                <h4 class="title"><a href="">Sed ut perspiciatis</a></h4>
-                                <p class="description">
-                                    Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                    cillum dolore eu fugiat nulla pariatur
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-binoculars" style="color: #41cf2e"></i>
                                 </div>
-                                <h4 class="title"><a href="">Magni Dolores</a></h4>
-                                <p class="description">
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                                    qui officia deserunt mollit anim id est laborum
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-brightness-high" style="color: #d6ff22"></i>
-                                </div>
-                                <h4 class="title"><a href="">Nemo Enim</a></h4>
-                                <p class="description">
-                                    At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                                    blanditiis praesentium voluptatum deleniti atque
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="box">
-                                <div class="icon">
-                                    <i class="bi bi-calendar4-week" style="color: #4680ff"></i>
-                                </div>
-                                <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
-                                <p class="description">
-                                    Et harum quidem rerum facilis est et expedita distinctio. Nam
-                                    libero tempore, cum soluta nobis est eligendi
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-            <!-- End Services Section -->
+            <!-- End Tawaran Layanan Post Webinar Section -->
 
             <!-- ======= Why Us Section ======= -->
             <section id="why-us">

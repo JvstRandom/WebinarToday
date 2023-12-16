@@ -30,8 +30,7 @@
                             <h4>{{ organisasi.namaOrganisasi }}</h4>
                             <p class="text-secondary mb-1">Full Stack Developer</p>
                             <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                            <button class="btn btn-primary">Follow</button>
-                            <button class="btn btn-outline-primary">Message</button>
+                            <button @click.prevent="logout" class="btn btn-outline-danger">log out</button>
                           </div>
                         </div>
                       </div>
@@ -67,16 +66,6 @@
                               {{ organisasi.noTelp }}
                             </div>
                           </div>
-                          <!-- <hr>
-                          <div class="row">
-                            <div class="col-sm-3">
-                              <h6 class="mb-0">Address</h6>
-                            </div>
-                            <div class="col-sm-9 text-secondary">
-                              Bay Area, San Francisco, CA
-                            </div>
-                          </div> -->
-                          <!-- Link social media -->
                           <hr>
                           <div class="row">
                             <div class="col-sm-3">
@@ -127,30 +116,6 @@
               </div>
             </div>
 
-            <!-- Link social media -->
-            <!-- <div class="row gutters-sm">
-              <div class="card mt-3">
-              <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
-                  <span class="text-secondary">https://bootdey.com</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
-                  <span class="text-secondary">@bootdey</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
-                  <span class="text-secondary">bootdey</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                  <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
-                  <span class="text-secondary">bootdey</span>
-                </li>
-              </ul>
-              </div>
-            </div> -->
-
           <!-- skill -->
           <div class="row gutters-sm">
 
@@ -164,7 +129,7 @@
                         <h6 class="d-flex align-items-center mb-3">List Webinar:</h6>
                       </div>
                       <div class="col-sm text-end">
-                        <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link>
+                        <button @click.prevent="navigateToAddWebinar" class="btn btn-success">Tambah Webinar</button>
                       </div>
                     </div>
                     <hr>
@@ -175,7 +140,7 @@
                                 <img :src="getImageUrl(webinar.img)" alt="Webinar Image" />
                               </figure>
                               <div class="card-header">
-                                <router-link :to="'/webinar/' + webinar.id">{{ webinar.namaWebinar }}</router-link>
+                                <router-link :to="'/page/' + webinar.id">{{ webinar.namaWebinar }}</router-link>
                                 <button class="icon-button" @click="like(webinar.id)">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" display="block" id="Heart">
                                     <path d="M7 3C4.239 3 2 5.216 2 7.95c0 2.207.875 7.445 9.488 12.74a.985.985 0 0 0 1.024 0C21.125 15.395 22 10.157 22 7.95 22 5.216 19.761 3 17 3s-5 3-5 3-2.239-3-5-3z" />
@@ -241,6 +206,7 @@
     },
     data() {
       return {
+        logindata: [],
         webinarList: [], // Change to an array to store multiple webinars
         organisasi: {},
         itemsPerPage: 6,
@@ -251,7 +217,7 @@
     },
     created() {
       // Make an Axios request to fetch organisasi data and associated webinars
-      this.fetchOrganisasiData();
+      this.fetchLoginData();
     },
     computed: {
       // Calculate total pages based on the number of webinars and items per page
@@ -265,7 +231,45 @@
         return this.webinarList.slice(startIndex, endIndex);
       },
     },
+    watch: {
+      logindata: {
+        immediate: true, // Triggers the handler immediately after component creation
+        handler(newValue, oldValue) {
+          if (newValue) {
+              this.fetchOrganisasiData(newValue);
+          } else {
+            console.log("logindata is undefined");
+          }
+        },
+      },
+    },
     methods: {
+      async fetchLoginData()
+      {
+        try {
+        const response = await axios.get('protected', {
+          headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+
+          console.log(response);
+          console.log(response.data.logindata);
+          if(response.data.logindata){
+              this.logindata = response.data.logindata.organisasi_id;
+              console.log(this.logindata);
+              
+          } else {
+              console.error('logindata is undefined in response:', response);
+          }
+
+          this.message = response.data.message;
+        } catch (error) {
+          this.$router.push('/login');
+          console.error('Failed to fetch protected data:', error.response.data.error);
+        }
+      },
+
       getImageUrl(blobData) {
         console.log('Blob Data:', blobData);
 
@@ -284,6 +288,14 @@
         }
       
         return ''; // or set a default image URL
+      },
+
+      navigateToAddWebinar() {
+          // Fetch login data before navigating
+          this.fetchProtectedData().then(() => {
+          // Navigate to AddWebinar with logindata
+          this.$router.push(`/addwebinar/${this.logindata}`);
+          });
       },
 
       async submitForm() {
@@ -334,10 +346,8 @@
         const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
         return formattedDate;
       },
-      async fetchOrganisasiData() {
+      async fetchOrganisasiData(organisasi_id) {
         try {
-          // Assume you have the organisasi_id from the logged-in penyelenggara
-          const organisasi_id = 1; // Replace with the actual organisasi_id
 
           // Make a request to fetch organisasi data
           const organisasiResponse = await axios.get(`http://localhost:8000/penyelenggara/${organisasi_id}`);
@@ -360,6 +370,17 @@
           console.error('Error fetching data', error);
         }
       },
+
+      async logout() {
+          try {
+              localStorage.removeItem('token');
+              console.log('succesfully logged out');
+              this.$router.push('/');
+          } catch (error) {
+              console.error('Error logging out:', error);
+          }
+      },
+
       // Other methods for pagination
       prevPage() {
         if (this.currentPage > 1) {

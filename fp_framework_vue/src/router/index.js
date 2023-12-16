@@ -63,8 +63,10 @@ const routes = [
     meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/addWebinar',
+    path: '/addWebinar/:organisasi_id',
+    name: 'addWebinar',
     component: addWebinar,
+    props: true,
     meta: { showHeader: true, showFooter: true },
   },
   {
