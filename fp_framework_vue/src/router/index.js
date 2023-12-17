@@ -79,12 +79,12 @@ const routes = [
     meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/edituser',
+    path: '/edituser/:user_id',
     component: updateUser,
     meta: { showHeader: true, showFooter: true },
   },
   {
-    path: '/editpenyelenggara',
+    path: '/updatePenyelenggara/:organisasi_id',
     component: updatePenyelenggara,
     meta: { showHeader: true, showFooter: true },
   },

@@ -7,7 +7,7 @@
           <div class="card">
             <div class="card-body">
 
-              <form @submit.prevent="submitForm">
+              <form @submit.prevent="submitForm($route.params.user_id)">
                 <table class="table table-striped">
                 <!-- Add input fields for the user data you want to update -->
                   <tr>
@@ -62,15 +62,14 @@ export default {
     };
   },
   created() {
-      // Panggil metode untuk mengambil data pengguna
-      this.fetchUserData();
+    const user_id = this.$route.params.user_id;
+
+    console.log('User ID:', user_id);
+    this.fetchUserData(user_id);
     },
   methods: {
-    async fetchUserData() {
+    async fetchUserData(user_id) {
         try {
-          // Dapatkan user_id dari penyelenggara yang sedang login
-          const user_id = 201; // Ganti dengan user_id yang sesuai
-
           // Ambil data user
           const formDataResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
           console.log('User API Response:', formDataResponse.data);
@@ -82,9 +81,8 @@ export default {
           console.error('Error fetching data', error);
         }
       },
-    submitForm() {
-      const user_id = 201; // Replace with the actual user_id you want to update
-      const apiUrl = `http://localhost:8000/users/${user_id}`; // Replace with your user update API endpoint
+      submitForm(user_id) {
+      const apiUrl = `http://localhost:8000/user/${user_id}`; // Replace with your user update API endpoint
 
       axios
         .put(apiUrl, this.formData)

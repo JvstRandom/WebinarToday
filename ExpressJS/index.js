@@ -105,24 +105,34 @@ app.get("/webinars-list-user/:user_id", (req, res) => {
     const user_id = req.params.user_id;
 
     const sql = `
-        SELECT *
-        FROM webinar
-        WHERE user_id = ?
-        ORDER BY waktu DESC
+        SELECT w.*
+        FROM webinar w
+        INNER JOIN user_order uo ON w.webinar_id = uo.webinar_id
+        WHERE uo.user_id = ?
+        ORDER BY w.waktu DESC
     `;
 
     db.query(sql, [user_id], (err, result) => {
         if (err) {
-            response(500, "error", "Internal Server Error", res);
+            console.error('Error executing SQL query:', err);
+            res.status(500).json({
+                status: 'error',
+                message: 'Internal Server Error',
+                error: err.message, // Include the error message in the response
+            });
         } else {
-            response(200, result, "Webinars retrieved successfully", res);
+            res.status(200).json({
+                status: 'success',
+                payload: result,
+                message: 'Webinars retrieved successfully',
+            });
         }
     });
 });
 
 app.get("/penyelenggara", (req, res) => {
     console.log("halo");
-    const sql = "SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi"
+    const sql = "SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password, role FROM organisasi"
     db.query(sql, (err, result)=> {
         if (err) throw err;
         return res.status(200).json({ result });
@@ -133,7 +143,7 @@ app.get("/penyelenggara", (req, res) => {
 
 app.get("/penyelenggara/:organisasi_id", (req, res) => {
     const organisasi_id = req.params.organisasi_id;
-    const sql = `SELECT organisasi_id, namaOrganisasi, noTelp, email, website, password FROM organisasi WHERE organisasi_id = ?`;
+    const sql = `SELECT organisasi_id, namaOrganisasi, noTelp, email, website FROM organisasi WHERE organisasi_id = ?`;
     
     db.query(sql, [organisasi_id], (err, result) => {
         if (err) throw err;
@@ -488,9 +498,9 @@ app.get("/user/:user_id", (req, res) => {
     });
 });
 
-app.put('/users/:user_id', async (req, res) => {
+app.put('/user/:user_id', async (req, res) => {
     const user_id = req.params.user_id;
-    const { username, email, noTelp, password, role } = req.body;
+    const { username, email, noTelp } = req.body;
   
     try {
       // Check if the user exists
@@ -502,8 +512,8 @@ app.put('/users/:user_id', async (req, res) => {
   
       // Update user data
       await db.query(
-        'UPDATE user SET username = ?, email = ?, noTelp = ?, password = ?, role = ? WHERE user_id = ?',
-        [username, email, noTelp, password, role, user_id]
+        'UPDATE user SET username = ?, email = ?, noTelp = ? WHERE user_id = ?',
+        [username, email, noTelp, user_id]
       );
   
       return res.status(200).json({ success: true, message: 'User updated successfully' });
@@ -516,7 +526,7 @@ app.put('/users/:user_id', async (req, res) => {
 
   app.put('/organisasi/:organisasi_id', async (req, res) => {
     const organisasi_id = req.params.organisasi_id;
-    const { namaOrganisasi, noTelp, email, website, password, role } = req.body;
+    const { namaOrganisasi, noTelp, email, website } = req.body;
   
     try {
       // Check if the organisasi exists
@@ -528,8 +538,8 @@ app.put('/users/:user_id', async (req, res) => {
   
       // Update organisasi data
       await db.query(
-        'UPDATE organisasi SET namaOrganisasi = ?, noTelp = ?, email = ?, website = ?, password = ?, role = ? WHERE organisasi_id = ?',
-        [namaOrganisasi, noTelp, email, website, password, role, organisasi_id]
+        'UPDATE organisasi SET namaOrganisasi = ?, noTelp = ?, email = ?, website = ? WHERE organisasi_id = ?',
+        [namaOrganisasi, noTelp, email, website, organisasi_id]
       );
   
       return res.status(200).json({ success: true, message: 'Organisasi updated successfully' });

@@ -30,7 +30,7 @@
                             <h4>{{ organisasi.namaOrganisasi }}</h4>
                             <p class="text-secondary mb-1">Full Stack Developer</p>
                             <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                            <button @click.prevent="logout" class="btn btn-outline-danger">log out</button>
+                            <button @click.prevent="logout" class="btn btn-outline-danger mt-3">log out</button>
                           </div>
                         </div>
                       </div>
@@ -105,7 +105,7 @@
                           <hr>
                           <div class="row">
                             <div class="col-sm-12">
-                              <router-link to="/editpenyelenggara" class="btn btn-info">Edit</router-link>
+                              <button @click.prevent="updatePenyelenggara" class="btn btn-info">Edit</button>
                             </div>
                           </div>
                       </div>
@@ -292,9 +292,17 @@
 
       navigateToAddWebinar() {
           // Fetch login data before navigating
-          this.fetchProtectedData().then(() => {
+          this.fetchLoginData().then(() => {
           // Navigate to AddWebinar with logindata
           this.$router.push(`/addwebinar/${this.logindata}`);
+          });
+      },
+
+      updatePenyelenggara() {
+          // Fetch login data before navigating
+          this.fetchLoginData().then(() => {
+          // Navigate to AddWebinar with logindata
+          this.$router.push(`/updatePenyelenggara/${this.logindata}`);
           });
       },
 

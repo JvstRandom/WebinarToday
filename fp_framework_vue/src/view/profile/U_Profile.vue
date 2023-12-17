@@ -29,13 +29,13 @@
                           <div class="mt-3">
                             <h4>{{ user.username }}</h4>
                             <!-- <p class="text-secondary mb-1">Full Stack Developer</p>
-                            <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                            <button @click="logout" class="btn btn-outline-danger">log out</button>
+                            <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> -->
+                            <button @click.prevent="logout" class="btn btn-outline-danger mt-3">log out</button>
                           </div>
                         </div>
                       </div>
                     </div>
-                    </div> -->
+                    </div>
                     <!-- Profile -->
                     <div class="col-sm-8">
                     <div class="card h-100 ">
@@ -69,7 +69,7 @@
                           <hr>
                           <div class="row">
                             <div class="col-sm-12">
-                              <router-link to="/edituser" class="btn btn-info">Edit</router-link>
+                              <button @click.prevent="updateUser" class="btn btn-info">Edit</button>
                             </div>
                           </div>
                       </div>
@@ -79,8 +79,7 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+
           <!-- skill -->
           <div class="row gutters-sm">
 
@@ -93,9 +92,9 @@
                       <div class="col-sm"> 
                         <h6 class="d-flex align-items-center mb-3">Webinar yang Anda Ikuti :</h6>
                       </div>
-                      <!-- <div class="col-sm text-end">
-                        <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link>
-                      </div> -->
+                      <div class="col-sm text-end">
+                        <!-- <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link> -->
+                      </div>
                     </div>
                     <hr>
 
@@ -150,14 +149,13 @@
                       </li>
                     </ul>
                   </nav>
+
                 </div>
               </div>
-            </div>
           </div>
+          
         </div>
       </div>
-    </div>
-    </div>
     </div>
   </div>
 </template>
@@ -173,7 +171,7 @@
     data() {
       return {
         loginUserData: [],
-        displayedWebinars: [],
+        // displayedWebinars: [],
         webinarList: [],
         user: {},
         itemsPerPage: 6,
@@ -211,6 +209,31 @@
     },
 
     methods: {
+      async fetchUserLoginData() {
+        try {
+          const response = await axios.get('profileUser', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
+
+          console.log(response);
+          console.log(response.data.loginUserData);
+          if(response.data.loginUserData){
+              this.loginUserData = response.data.loginUserData.user_id;
+              console.log(this.loginUserData);
+              
+          } else {
+              console.error('loginUserData is undefined in response:', response);
+          }
+
+          this.message = response.data.message;
+        } catch (error) {
+          this.$router.push('/loginuser');
+          console.error('Failed to fetch protected data:', error.response.data.error);
+        }
+      },
+
       getImageUrl(blobData) {
         console.log('Blob Data:', blobData);
 
@@ -238,31 +261,6 @@
         return formattedDate;
       },
 
-      async fetchUserLoginData() {
-        try {
-          const response = await axios.get('profileUser', {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          });
-
-          console.log(response);
-          console.log(response.data.loginUserData);
-          if(response.data.loginUserData){
-              this.loginUserData = response.data.loginUserData.user_id;
-              console.log(this.loginUserData);
-              
-          } else {
-              console.error('loginUserData is undefined in response:', response);
-          }
-
-          this.message = response.data.message;
-        } catch (error) {
-          this.$router.push('/loginuser');
-          console.error('Failed to fetch protected data:', error.response.data.error);
-        }
-      },
-
       async fetchUserData(user_id) {
         try {
 
@@ -271,7 +269,7 @@
 
           // Make a request to fetch organisasi data
           const userResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
-          console.log('Organisasi API Response:', userResponse.data);
+          console.log('User API Response:', userResponse.data);
 
           if (userResponse.data && userResponse.data.payload) {
             this.user = userResponse.data.payload;
@@ -285,7 +283,7 @@
             }
           }
         } catch (error) {
-          console.error('Error fetching data', error);
+          console.error('Error fetching data', error.response.data);
         }
       },
 
@@ -297,6 +295,14 @@
           } catch (error) {
               console.error('Error logging out:', error);
           }
+      },
+
+      updateUser() {
+          // Fetch login data before navigating
+          this.fetchUserLoginData().then(() => {
+          // Navigate to AddWebinar with logindata
+          this.$router.push(`/edituser/${this.loginUserData}`);
+          });
       },
 
       // Metode lain untuk navigasi halaman
