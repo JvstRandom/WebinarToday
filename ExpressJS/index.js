@@ -37,12 +37,40 @@ app.listen(PORT, () => {
 });
 
 app.get("/webinar-list", (req, res) => {
-    const sql = "SELECT webinar_id, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id, views FROM webinar"
+    const sql = "SELECT * FROM webinar"
     db.query(sql, (err, result)=> {
         if (err) throw err;
         response(200, result, "webinars get list", res)
     })
 })
+
+//nampilin webinar jika view lebih dari 100
+app.get("/webinar-toplist", (req, res) => {
+    const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    const sql = `SELECT * FROM webinar WHERE views > 100 AND waktu > '${currentDate}'`;
+    db.query(sql, (err, result)=> {
+        if (err) throw err;
+        response(200, result, "webinars get list views > 100", res)
+    })
+})
+
+//logika views
+app.put('/increment-views/:webinar_id', (req, res) => {
+    const { webinar_id } = req.params;
+
+    const sql = `UPDATE webinar SET views = views + 1 WHERE webinar_id = ?`;
+  
+    db.query(sql, [webinar_id], (err, result) => {
+      if (err) {
+        console.error('Error incrementing views:', err);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+      if (result.affectedRows > 0) {
+        return res.status(200).json({ message: 'Views incremented successfully' });
+      }
+      return res.status(404).json({ error: 'Webinar not found' });
+    });
+  });
 
 //nampilin webinar sesuai webinar_id
 app.get("/webinar/:webinar_id", (req, res)=> {
@@ -218,6 +246,8 @@ app.post('/addWebinar/:organisasi_id', upload.single('img'), (req, res) => {
     // Check if req.file is available before accessing its properties
     if (req.file && req.file.buffer) {
         formData.img = req.file.buffer;
+    } else {
+        console.log("No file");
     }
 
     const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body;
@@ -364,25 +394,72 @@ app.delete("/delwebinar/:webinar_id", (req, res) => {
     })
 })
 
-// `UPDATE player SET Nama = '${Nama}', Team = '${Team}', Kategori = '${Kategori}' WHERE Player_id = ${Player_id}`
-
 // edit webinar
-app.put("/editWebinar/:webinar_id/:organisasi_id", (req, res) => {
+app.put("/editWebinar/:webinar_id/:organisasi_id", async (req, res) => {
     const webinar_id = req.params.webinar_id;
     const organisasi_id = req.params.organisasi_id;
     const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body
+    console.log('Received data:', req.body);
+    
     const sql = `UPDATE webinar SET namaWebinar = '${namaWebinar}', Online = '${Online}', harga = '${harga}', sertif = '${sertif}', deskripsi = '${deskripsi}', lokasi = '${lokasi}', waktu = '${waktu}', cp = '${cp}', host = '${host}', organisasi_id = '${organisasi_id}' WHERE webinar_id = '${webinar_id}' `
-    db.query(sql, (err,result) => {
-        if (err) response(400, "invalid", "gagal", res);
+    
+    try {
+        const result = await db.query(sql);
+
         if (result?.affectedRows) {
             const data = {
                 isSuccess: result.affectedRows,
                 message: result.message,
-            }
-            response(200, data, "Data edit Succesfully", res)
+            };
+
+            // Use the response function to send a successful response
+            response(200, data, "Data edit successfully", res);
+        } else {
+            // Handle the case where no rows were affected
+            response(400, "invalid", "gagal", res);
         }
-    })
+    } catch (error) {
+        // Handle database query errors
+        console.error('Error updating webinar:', error);
+
+        // Send an error response using the response function
+        response(500, "error", "Internal Server Error", res);
+    }
 })
+
+app.put('/updateWebinar/:webinar_id/:organisasi_id', upload.single('img'), (req, res) => {
+    console.log('Incoming request body:', req.body);
+    const webinar_id = req.params.webinar_id;
+    const organisasi_id = req.params.organisasi_id;
+    const formData = req.body;
+
+    // Check if req.file is available before accessing its properties
+    if (req.file && req.file.buffer) {
+        formData.img = req.file.buffer;
+    } else {
+        console.log("No file");
+    }
+
+    console.log('Received data:', req.body);
+
+    const { namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host } = req.body;
+    const sql = `UPDATE webinar SET img=?, namaWebinar=?, Online=?, harga=?, sertif=?, deskripsi=?, lokasi=?, waktu=?, cp=?, host=?, organisasi_id=? WHERE webinar_id=?`;
+    const values = [formData.img, namaWebinar, Online, harga, sertif, deskripsi, lokasi, waktu, cp, host, organisasi_id, webinar_id];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error(err);
+            return response(400, "invalid", "error", res);
+        }
+        if (result?.affectedRows > 0) {
+            response(200, webinar_id, "Data Updated Successfully", res);
+        } else {
+            response(404, webinar_id, "No matching webinar found", res);
+        }
+    });
+});
+
+
 
 // tampilan user sesuai user id
 // app.get('/user/:user_id', (req, res)=> {

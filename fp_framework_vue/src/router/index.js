@@ -13,7 +13,7 @@ import loginUser from '@/view/register/login_u.vue';
 import SignupUser from '@/view/register/Signup_U.vue';
 import updateUser from '@/view/profile/updateUser.vue';
 import updatePenyelenggara from '@/view/profile/updatePenyelenggara.vue';
-
+import editWebinar from '@/view/webinar/editWebinar.vue';
 
 
 const routes = [
@@ -64,7 +64,6 @@ const routes = [
   },
   {
     path: '/addWebinar/:organisasi_id',
-    name: 'addWebinar',
     component: addWebinar,
     props: true,
     meta: { showHeader: true, showFooter: true },
@@ -89,11 +88,12 @@ const routes = [
     component: updatePenyelenggara,
     meta: { showHeader: true, showFooter: true },
   },
-  // {
-  //   path: '/editWebinar/:webinar_id/:organisasi_id',
-  //   name: 'editWebinar',
-  //   component: PlayerEdit
-  // },
+  {
+    path: '/editWebinar/:webinar_id/:organisasi_id',
+    name: 'editWebinar',
+    component: editWebinar,
+    meta: { showHeader: true, showFooter: true },
+  },
   // Tambahkan rute lain jika diperlukan
 ];
 

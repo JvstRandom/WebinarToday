@@ -242,7 +242,7 @@
                         <li class="list-group-item">harga : {{ webinar.harga }}</li>
                         <li class="list-group-item">CP : {{ webinar.cp }}</li>
                     </ul>
-                    <a href="#" class="btn btn-primary">Edit</a>
+                    <a href="#" @click="navigateToEditWebinar(webinar.webinar_id)" class="btn btn-primary">Edit</a>
                     <a href="#" @click="deleteWebinar(webinar.webinar_id)" class="btn btn-danger">Delete</a>
                 </div>
                 </div>
@@ -334,6 +334,15 @@ export default {
         // Navigate to AddWebinar with logindata
         console.log('ini navigate:', this.logindata);
         this.$router.push(`/addwebinar/${this.logindata}`);
+        });
+    },
+
+    navigateToEditWebinar(webinar_id) {
+        // Fetch login data before navigating
+        this.fetchProtectedData().then(() => {
+        // Navigate to AddWebinar with logindata
+        console.log('ini navigate:', this.logindata," ", webinar_id);
+        this.$router.push(`/editwebinar/${webinar_id}/${this.logindata}`);
         });
     },
 
