@@ -152,43 +152,42 @@
       async editWebinar(webinar_id, organisasi_id) {
       const apiUrl = `updateWebinar/${webinar_id}/${organisasi_id}`;
 
-      // Construct FormData
-      // const formData = new FormData();
-      // formData.append('img', this.dataURItoBlob(this.formData.img), 'webinar-image.jpg');
-      // formData.append('namaWebinar', this.formData.namaWebinar);
-      // formData.append('Online', this.formData.Online);
-      // formData.append('sertif', this.formData.sertif);
-      // formData.append('harga', this.formData.harga);
-      // formData.append('deskripsi', this.formData.deskripsi);
-      // formData.append('waktu', this.formData.waktu);
-      // formData.append('lokasi', this.formData.lokasi);
-      // formData.append('cp', this.formData.cp);
-      // formData.append('host', this.formData.host);
+      const formData = new FormData();
+      formData.append('img', this.dataURItoBlob(this.formData.img), 'webinar-image.jpg');
+      formData.append('namaWebinar', this.formData.namaWebinar);
+      formData.append('Online', this.formData.Online);
+      formData.append('sertif', this.formData.sertif);
+      formData.append('harga', this.formData.harga);
+      formData.append('deskripsi', this.formData.deskripsi);
+      formData.append('waktu', this.formData.waktu);
+      formData.append('lokasi', this.formData.lokasi);
+      formData.append('cp', this.formData.cp);
+      formData.append('host', this.formData.host);
 
-      // console.log('FormData:', formData);
+      console.log('FormData:', formData);
 
-      const updatedData = {
-          namaWebinar: this.formData.namaWebinar,
-          Online: this.formData.Online,
-          sertif: this.formData.sertif,
-          harga: this.formData.harga,
-          deskripsi: this.formData.deskripsi,
-          waktu: this.formData.waktu,
-          lokasi: this.formData.lokasi,
-          cp: this.formData.cp,
-          host: this.formData.host,
-          img: this.dataURItoBlob(this.formData.img)
-      };
+      // const updatedData = {
+      //     namaWebinar: this.formData.namaWebinar,
+      //     Online: this.formData.Online,
+      //     sertif: this.formData.sertif,
+      //     harga: this.formData.harga,
+      //     deskripsi: this.formData.deskripsi,
+      //     waktu: this.formData.waktu,
+      //     lokasi: this.formData.lokasi,
+      //     cp: this.formData.cp,
+      //     host: this.formData.host,
+      //     img: this.dataURItoBlob(this.formData.img)
+      // };
 
-      console.log('updateData:', updatedData);
+      console.log('updateData:', formData);
 
       try {
-        const response = await axios.put(apiUrl, updatedData);
+        const response = await axios.put(apiUrl, formData);
 
         console.log('Webinar update successful:', response.data);
 
         // Handle success, update state, or perform other actions
-        alert(res.data.message);
+        alert(response.data.message);
         this.$router.push(`/dashboard`);
 
       } catch (error) {

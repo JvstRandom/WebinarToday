@@ -14,6 +14,7 @@ import SignupUser from '@/view/register/Signup_U.vue';
 import updateUser from '@/view/profile/updateUser.vue';
 import updatePenyelenggara from '@/view/profile/updatePenyelenggara.vue';
 import editWebinar from '@/view/webinar/editWebinar.vue';
+import DashOrder from '@/view/dashboard/dashOrder.vue';
 
 
 const routes = [
@@ -93,6 +94,11 @@ const routes = [
     name: 'editWebinar',
     component: editWebinar,
     meta: { showHeader: true, showFooter: true },
+  },
+  {
+    path: '/dashOrder/:webinar_id',
+    component: DashOrder,
+    meta: { showHeader: true, showFooter: true }
   },
   // Tambahkan rute lain jika diperlukan
 ];

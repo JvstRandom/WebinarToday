@@ -16,10 +16,9 @@
                     </ul>
                 </div>
             </div>
-            <div class="row portfolio-container d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200"
-            v-for="(webinar, index) in this.webinars" :key="index">
-                <div class="col-lg-4 col-md-6 portfolio-item filter-web ">
-                    <div class="portfolio-wrap">
+            <div class="row portfolio-container d-flex justify-content-center" data-aos="fade-up" data-aos-delay="200" >
+                <div class="col-lg-4 col-md-6 portfolio-item filter-web " v-for="(webinar, index) in this.webinars" :key="index">
+                    <div class="portfolio-wrap" >
                         <img :src="getImageUrl(webinar.img)" class="img-fluid" alt="Webinar Image" />
                         <div class="portfolio-info">
                             <router-link :to="'/page/' + webinar.webinar_id" @click.stop><div @click="incrementViews(webinar.webinar_id)">
@@ -65,7 +64,7 @@ export default {
     data() {
         return {
             webinars: [],
-            displayLimit: 3,
+            displayLimit: 2,
         };
     },
     mounted() {
@@ -122,4 +121,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.portfolio-container
+{
+    display: grid !important; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 10px;
+}
+</style>

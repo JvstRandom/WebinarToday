@@ -86,7 +86,7 @@
                 </a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="/dashOrder">
+                <a class="nav-link d-flex align-items-center gap-2" href="#">
                     <svg class="bi"><use xlink:href="#file-earmark"/></svg>
                     Orders
                 </a>
@@ -98,39 +98,6 @@
                 </a>
                 </li>
             </ul>
-
-            <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
-                <span>Saved reports</span>
-                <a class="link-secondary" href="#" aria-label="Add a new report">
-                <svg class="bi"><use xlink:href="#plus-circle"/></svg>
-                </a>
-            </h6>
-            <ul class="nav flex-column mb-auto">
-                <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
-                    <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
-                    Current month
-                </a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
-                    <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
-                    Last quarter
-                </a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
-                    <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
-                    Social engagement
-                </a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-2" href="#">
-                    <svg class="bi"><use xlink:href="#file-earmark-text"/></svg>
-                    Year-end sale
-                </a>
-                </li>
-            </ul> -->
 
             <hr class="my-3">
 
@@ -154,59 +121,37 @@
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
+            <h1 class="h2">Orders</h1>
         </div>
 
-        <h2>List Webinar Anda</h2>
-        <div class="align-self-end ml-auto addbutton" >
-            <Button @click.prevent="navigateToAddWebinar" class="w-30 btn btn-lg btn-outline-primary">
-                Tambah Webinar
-            </Button> 
-        </div>
+        <h2>List Orders</h2>
         
-        <div class="webinar-cont">
-            <div class="card" v-for="(webinar, index) in this.webinars" :key="index">
-                
-                <!-- <div class="card-header">
-                   
-                </div> -->
-                <div class="card-body">
-                    <h5 class="card-title">{{ webinar.namaWebinar }}</h5>
-                    <p class="card-text">{{ webinar.deskripsi }}</p>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">waktu : {{ formatWebinarDate(webinar.waktu) }}</li>
-                        <li class="list-group-item">host : {{ webinar.host }}</li>
-                        <li class="list-group-item">harga : {{ webinar.harga }}</li>
-                        <li class="list-group-item">CP : {{ webinar.cp }}</li>
-                    </ul>
-                    <a href="#" @click="navigateToEditWebinar(webinar.webinar_id)" class="btn btn-success editbtn">Edit</a>
-                    <a href="#" @click="deleteWebinar(webinar.webinar_id)" class="btn btn-danger deletebtn">Delete</a>
-                    <RouterLink :to="{path:'/dashOrder/'+webinar.webinar_id}"  class="btn btn-primary infobtn">More Info</RouterLink>
-                </div>
-                </div>
-        </div>
-        <!-- <div class="table-responsive small">
+        <div class="table-responsive small">
             <table class="table table-striped table-sm">
             <thead>
                 <tr>
                 <th scope="col">#</th>
-                <th scope="col">Judul Webinar</th>
+                <th scope="col">Nama Lengkap</th>
+                <th scope="col">Email</th>
+                <th scope="col">Tanggal Daftar</th>
+                <th scope="col">no telp</th>
+                <th scope="col">webinar</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Sertifikat</th>
-                <th scope="col">Header</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                <td>1,001</td>
-                <td>random</td>
-                <td>data</td>
-                <td>placeholder</td>
-                <td>text</td>
+                <tr v-for="(order, index) in this.orders" :key="index">
+                <td>{{ index+1 }}</td>
+                <td>{{ order.NamaLengkap }}</td>
+                <td>{{ order.email }}</td>
+                <td>{{ order.tgl_pesan }}</td>
+                <td>{{ order.noTelp }}</td>
+                <td>{{ order.namaWebinar }}</td>
+                <td>{{ order.harga }}</td>
                 </tr>
             </tbody>
             </table>
-        </div> -->
+        </div>
         </main>
     </div>
     </div>
@@ -217,117 +162,68 @@
 
 <script>
 import axios from "axios";
-import { RouterLink } from "vue-router";
 
 export default {
-    data() {
-        return {
-            logindata: [],
-            webinars: [],
-        };
-    },
-    mounted() {
-        this.fetchProtectedData();
-        console.log("mounted");
-    },
-    watch: {
-        logindata: {
-            immediate: true, // Triggers the handler immediately after component creation
-            handler(newValue, oldValue) {
-                if (newValue) {
-                    this.getWebinarsPenyelenggara(newValue);
-                }
-                else {
-                    console.log("logindata is undefined");
-                }
-            },
-        },
-    },
-    methods: {
-        async fetchProtectedData() {
-            try {
-                const response = await axios.get('protected', {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
-                console.log(response);
-                console.log(response.data.logindata);
-                if (response.data.logindata) {
-                    this.logindata = response.data.logindata.organisasi_id;
-                    console.log(this.logindata);
-                }
-                else {
-                    console.error('logindata is undefined in response:', response);
-                }
-                this.message = response.data.message;
-            }
-            catch (error) {
-                console.error('Failed to fetch protected data:', error.response.data.error);
-            }
-        },
-        navigateToAddWebinar() {
-            // Fetch login data before navigating
-            this.fetchProtectedData().then(() => {
-                // Navigate to AddWebinar with logindata
-                console.log('ini navigate:', this.logindata);
-                this.$router.push(`/addwebinar/${this.logindata}`);
-            });
-        },
-        navigateToEditWebinar(webinar_id) {
-            // Fetch login data before navigating
-            this.fetchProtectedData().then(() => {
-                // Navigate to AddWebinar with logindata
-                console.log('ini navigate:', this.logindata, " ", webinar_id);
-                this.$router.push(`/editwebinar/${webinar_id}/${this.logindata}`);
-            });
-        },
-        async logout() {
-            try {
-                localStorage.removeItem('token');
-                console.log('succesfully logged out');
-                this.$router.push('/');
-            }
-            catch (error) {
-                console.error('Error logging out:', error);
-            }
-        },
-        async getWebinarsPenyelenggara(organisasi_id) {
-            try {
-                const response = await axios.get(`/webinar_penyelenggara/${organisasi_id}`);
-                console.log(response);
-                this.webinars = response.data.payload;
-                console.log(this.webinars);
-            }
-            catch (error) {
-                console.error('Error fetching webinars:', error);
-            }
-        },
-        async deleteWebinar(webinar_id) {
-            if (confirm('Apakah anda yakin ingin menghapus webinar ini?')) {
-                try {
-                    const response = await axios.delete(`delwebinar/${webinar_id}`);
-                    alert(response.data.message);
-                    this.getWebinarsPenyelenggara();
-                }
-                catch (error) {
-                    if (error.response) {
-                        if (error.response.status === 400) {
-                            this.errorList = "error";
-                        }
-                    }
-                }
-            }
-        },
+  data() {
+    return {
+      logindata: [],
+      orders: [],
+    };
+  },
+  mounted() {
+    this.fetchProtectedData();
+    console.log("mountedorder");
+    this.getOrderByWebinar(this.$route.params.webinar_id);
+    console.log(this.$route.params.webinar_id);
+  },
+ 
+  methods: {
+    async fetchProtectedData() {
+      try {
+        const response = await axios.get('protected', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
 
-        formatWebinarDate(dateTimeString) {
-        // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
-        const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
-        const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
-        return formattedDate;
-      },
+        console.log(response);
+        console.log(response.data.logindata);
+        if(response.data.logindata){
+            this.logindata = response.data.logindata.organisasi_id;
+            console.log(this.logindata);
+            
+        } else {
+            console.error('logindata is undefined in response:', response);
+        }
+
+        this.message = response.data.message;
+      } catch (error) {
+        console.error('Failed to fetch protected data:', error.response.data.error);
+      }
     },
-    components: { RouterLink }
+
+    async logout() {
+        try {
+            localStorage.removeItem('token');
+            console.log('succesfully logged out');
+            this.$router.push('/');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    },
+
+    async getOrderByWebinar(webinar_id) {
+    try {
+        const response = await axios.get(`/peserta/${webinar_id}`);
+        console.log(response);
+        this.orders = response.data.payload;
+        console.log(this.orders);
+    } catch (error) {
+        console.error('Error fetching webinars:', error);
+    }
+    },
+
+  },
 };
 </script>
 
@@ -413,16 +309,6 @@ export default {
       }
 
       h2{
-        margin-bottom: 20px;
-      }
-      .addbutton {
-        margin-bottom: 15px;
-      }
-      .editbtn, .deletebtn, .infobtn{
-        margin: 8px;
-      }
-      .card 
-      {
-        margin-bottom: 12px;
+        margin-bottom: 40px;
       }
 </style>
