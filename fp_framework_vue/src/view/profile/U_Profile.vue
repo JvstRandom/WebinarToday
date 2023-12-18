@@ -151,9 +151,26 @@
                   </nav>
 
                 </div>
+                
               </div>
+              
           </div>
-          
+          <div class="col mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    
+                    <div class="row">
+                      <hr>
+                      <div class="col-sm"> 
+                        <h6 class="d-flex align-items-center mb-3">Webinar yang Anda Sukai :</h6>
+                      </div>
+                      <div class="col-sm text-end">
+                        <!-- <router-link to="/addWebinar" class="btn btn-success">Tambah Webinar</router-link> -->
+                      </div>
+                    </div>
+                </div>
+                </div>
+                </div>
         </div>
       </div>
     </div>
