@@ -47,7 +47,7 @@ app.get("/webinar-list", (req, res) => {
 //nampilin webinar jika view lebih dari 100
 app.get("/webinar-toplist", (req, res) => {
     const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    const sql = `SELECT * FROM webinar WHERE views > 100 AND waktu > '${currentDate}' LIMIT 3`;
+    const sql = `SELECT * FROM webinar WHERE views > 100 AND waktu > '${currentDate}'`;
     db.query(sql, (err, result)=> {
         if (err) throw err;
         response(200, result, "webinars get list views > 100", res)
@@ -548,3 +548,86 @@ app.put('/user/:user_id', async (req, res) => {
       return res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
   });
+
+  app.post('/like-webinar/:user_id/:webinar_id', async (req, res) => {
+    try {
+      const { user_id, webinar_id } = req.params;
+  
+      // Lakukan operasi untuk menambahkan webinar_id ke dalam daftar liked_webinars pada user_id tertentu
+      // Misalnya, kita simpan di dalam basis data
+      // Gantilah operasi ini dengan operasi yang sesuai dengan server atau basis data yang kamu gunakan
+      // Contoh menggunakan MySQL
+      const result = await db.query('INSERT INTO liked_webinars (user_id, webinar_id) VALUES (?, ?)', [user_id, webinar_id]);
+  
+      res.status(200).json({
+        status: 'success',
+        message: 'Webinar has been liked successfully',
+      });
+    } catch (error) {
+      console.error('Error liking webinar:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  });
+  
+  // Mendefinisikan endpoint untuk menghapus webinar dari daftar yang disukai
+    app.delete('/unlike-webinar/:user_id/:webinar_id', async (req, res) => {
+    try {
+      const { user_id, webinar_id } = req.params;
+  
+      // Lakukan operasi untuk menghapus webinar_id dari daftar liked_webinars pada user_id tertentu
+      // Misalnya, kita simpan di dalam basis data
+      // Gantilah operasi ini dengan operasi yang sesuai dengan server atau basis data yang kamu gunakan
+      // Contoh menggunakan MySQL
+      const result = await db.query('DELETE FROM liked_webinars WHERE user_id = ? AND webinar_id = ?', [user_id, webinar_id]);
+  
+      res.status(200).json({
+        status: 'success',
+        message: 'Webinar has been unliked successfully',
+      });
+    } catch (error) {
+      console.error('Error unliking webinar:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  });
+  
+  
+  // Updated endpoint to fetch liked webinars based on user_id and webinar_id
+    app.get("/liked-webinars/:user_id", (req, res) => {
+        const user_id = req.params.user_id;
+        const webinar_id = req.params.webinar_id;
+
+        const sql = `
+            SELECT w.*
+            FROM webinar w
+            INNER JOIN liked_webinars lw ON w.webinar_id = lw.webinar_id
+            WHERE lw.user_id = ? 
+            ORDER BY w.waktu DESC
+        `;
+
+        db.query(sql, [user_id], (err, result) => {
+            if (err) {
+                console.error('Error executing SQL query:', err);
+                res.status(500).json({
+                    status: 'error',
+                    message: 'Internal Server Error',
+                    error: err.message,
+                });
+            } else {
+                res.status(200).json({
+                    status: 'success',
+                    payload: result,
+                    message: 'Liked Webinars retrieved successfully',
+                });
+            }
+        });
+    });
+
+  
