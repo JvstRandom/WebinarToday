@@ -17,13 +17,13 @@
                     <th>Nama Webinar </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.namaWebinar" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.namaWebinar" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>host </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.host" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.host" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>Online </th>
@@ -40,25 +40,25 @@
                     <th>Waktu </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.waktu" type="date" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.waktu" type="date" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>lokasi </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.lokasi" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.lokasi" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>Harga </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.harga" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.harga" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>cp </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.cp" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.cp" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>sertif </th>
@@ -81,7 +81,7 @@
                     <th>Deskripsi </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.deskripsi" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.deskripsi" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>

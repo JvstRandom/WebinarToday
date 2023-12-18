@@ -47,7 +47,7 @@ app.get("/webinar-list", (req, res) => {
 //nampilin webinar jika view lebih dari 100
 app.get("/webinar-toplist", (req, res) => {
     const currentDate = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-    const sql = `SELECT * FROM webinar WHERE views > 100 AND waktu > '${currentDate}'`;
+    const sql = `SELECT * FROM webinar WHERE views > 100 AND waktu > '${currentDate}' LIMIT 3`;
     db.query(sql, (err, result)=> {
         if (err) throw err;
         response(200, result, "webinars get list views > 100", res)

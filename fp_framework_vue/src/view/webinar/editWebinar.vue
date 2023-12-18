@@ -9,7 +9,7 @@
           <div class="col mb-3 mt-3">
             <div class="card">
               <i class="fas fa-table me-1"></i>
-              Insert Data Webinar
+              Edit Data Webinar
               <div class="card-body">
               <form @submit.prevent="editWebinar($route.params.webinar_id, $route.params.organisasi_id)">
                 <table class="table table-striped">
@@ -17,13 +17,13 @@
                     <th>Nama Webinar </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.namaWebinar" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.namaWebinar" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>host </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.host" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.host" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>Online </th>
@@ -40,25 +40,25 @@
                     <th>Waktu </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.waktu" type="date" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.waktu" type="date" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>lokasi </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.lokasi" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.lokasi" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>Harga </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.harga" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.harga" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>cp </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.cp" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.cp" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>sertif </th>
@@ -81,7 +81,7 @@
                     <th>Deskripsi </th>
                   </tr>
                   <tr>
-                    <td><input v-model="formData.deskripsi" type="text" class="input-group mb-3" required></td>
+                    <td><input v-model="formData.deskripsi" type="text" class="input-group mb-3 form-control" required></td>
                   </tr>
                   <tr>
                     <th>
@@ -108,18 +108,7 @@
   export default {
     data() {
       return {
-        formData: {
-          namaWebinar: '',
-          Online: 'n',
-          sertif: 'n',
-          harga: 0,
-          deskripsi: '',
-          waktu: '',
-          lokasi: '',
-          cp: 0,
-          host: '',
-          img: null,
-        },
+        formData: [],
       };
     },
 
@@ -129,6 +118,7 @@
       console.log('Organisasi ID edit:', organisasi_id);
 
       console.log('webinarid: ', this.$route.params.webinar_id);
+      this.ambilDataWebinar(this.$route.params.webinar_id);
     },
 
     methods: {
@@ -146,6 +136,23 @@
 
         if (file) {
           reader.readAsDataURL(file);
+        }
+      },
+
+      async ambilDataWebinar(webinar_id)
+      {
+        try {
+          const response = await axios.get(`/webinar/${webinar_id}`);
+          console.log(response.data);
+
+          if(response.data.payload)
+          {
+            this.formData = response.data.payload[0];
+            console.log("hai",this.formData);
+          }
+        } catch (error)
+        {
+          console.error('Error fetching data', error);
         }
       },
   

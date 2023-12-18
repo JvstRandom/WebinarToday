@@ -144,7 +144,7 @@
                 <td>{{ index+1 }}</td>
                 <td>{{ order.NamaLengkap }}</td>
                 <td>{{ order.email }}</td>
-                <td>{{ order.tgl_pesan }}</td>
+                <td>{{ formatWebinarDate(order.tgl_pesan) }}</td>
                 <td>{{ order.noTelp }}</td>
                 <td>{{ order.namaWebinar }}</td>
                 <td>{{ order.harga }}</td>
@@ -223,6 +223,12 @@ export default {
     }
     },
 
+    formatWebinarDate(dateTimeString) {
+      // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
+      const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
+      const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
+      return formattedDate;
+    },
   },
 };
 </script>

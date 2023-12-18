@@ -7,7 +7,7 @@
                     <h3 class="section-title">Top Webinar dan Seminar</h3>
                 </header>
 
-                <div class="row" data-aos="fade-up" data-aos-delay="100">
+                <!-- <div class="row" data-aos="fade-up" data-aos-delay="100">
                     <div class="col-lg-12">
                         <ul id="portfolio-flters">
                             <li data-filter="*" class="filter-active">All</li>
@@ -16,21 +16,22 @@
                             <li data-filter=".filter-web">Web</li>
                         </ul>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row portfolio-container flex" data-aos="fade-up" data-aos-delay="200">
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-                        <div class="card-list" v-for="webinar in filteredWebinars" :key="webinar.id">
-                            <RouterLink :to="{ path: '/page/' + webinar.id }">
-                                <article class="card">
+                    <div class="d-flex justify-content-center portfolio-item filter-web">
+                        <div class="card-list" v-for="(webinar, index) in this.webinars" :key="index">
+                                <article class="card column">
                                     <figure class="card-image">
-                                        <img src="@/assets/img/poster_webinar_upn.png"
-                                            alt="An orange painted blue, cut in half laying on a blue background" />
+                                        <img :src= "getImageUrl(webinar.img)"
+                                            alt="webinar img" />
                                     </figure>
                                     <div class="card-header">
-                                        <a href="#">{{ webinar.title }}</a>
-                                        <button class="icon-button" @click="like(webinar.id)">
+                                        <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
+                                            <div @click ="incrementViews(webinar.webinar_id)"><h5>{{ webinar.namaWebinar }}</h5></div>
+                                        </RouterLink>
+                                        <button class="icon-button" @click="like(webinar.webinar_id)">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" display="block" id="Heart">
@@ -39,7 +40,13 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <div class="card-footer">
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>Harga : {{ formatharga(webinar.harga) }}</li>
+                                            <li>Sertifikat : {{ formatsertifikat(webinar.sertif) }}</li>
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer koko">
                                         <div class="card-meta card-meta--views">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -50,8 +57,7 @@
                                             </svg>
                                             {{ webinar.views }}
                                         </div>
-                                    </div>
-                                    <div class="card-meta card-meta--date">
+                                        <div class="card-meta card-meta--date">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                             stroke-linejoin="round" display="block" id="Calendar">
@@ -60,10 +66,14 @@
                                             <path d="M16 2v4" />
                                             <path d="M2 10h20" />
                                         </svg>
-                                        {{ webinar.date }}
+                                        {{ formatWebinarDate(webinar.waktu) }}
                                     </div>
+                                    
+                                    </div>
+                                    <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
+                                        <button class="w-100 btn btn-primary more" @click="incrementViews(webinar.webinar_id)">Baca Selengkapnya</button>
+                                    </RouterLink>
                                 </article>
-                            </RouterLink>
                         </div>
                     </div>
 
@@ -78,50 +88,84 @@
 import axios from 'axios';
 
 export default {
-    name: 'ChartTopWebinar',
+    name: 'Chartwebinar',
     data() {
         return {
-            searchQuery: '',
-            filter: {
-                free: false,
-                paid: false,
-                online: false,
-                offline: false,
-                certificate: false,
-                thisWeek: false,
-                upcoming: false,
-            },
-            webinars: [
-                { id: 101, title: 'Succes Investment Mindser: Bagaimana Cara Mengatur Investasi agar Menjadi Investor yang Sukses.', isFree: 'y', isPaid: false, views: 2465, date: 'Jul 26, 2019' },
-                // ... webinar lainnya
-            ],
+            webinars: [],
+            displayLimit: 3,
         };
     },
-    computed: {
-        filteredWebinars() {
-            return this.webinars.filter((webinar) => {
-                const titleMatch = webinar.title.toLowerCase().includes(this.searchQuery.toLowerCase());
-                const isFree = !this.filter.free || webinar.isFree;
-                const isPaid = !this.filter.paid || webinar.isPaid;
-                const isOnline = !this.filter.online || webinar.isOnline;
-                const isOffline = !this.filter.offline || webinar.isOffline;
-                const hasCertificate = !this.filter.certificate || webinar.hasCertificate;
-                const isThisWeek = !this.filter.thisWeek || webinar.isThisWeek;
-                const isUpcoming = !this.filter.upcoming || webinar.isUpcoming;
-
-                return titleMatch && (isFree || isPaid) && (isOnline || isOffline) && hasCertificate && (isThisWeek || isUpcoming);
-            });
-        },
+    mounted() {
+        this.getTopWebinars();
     },
     methods: {
-        search() {
-            // Logika pencarian, jika diperlukan
+        getTopWebinars() 
+        {
+            axios.get(`/webinar-toplist`).then(response=>{
+                this.webinars = response.data.payload;
+                console.log(this.webinars);
+                //limit cuman 3
+                this.webinars = response.data.slice(0, this.displayLimit);
+            }).catch(error=>{
+                console.log("Error fetching webinar data:", error);
+            })
         },
-        like(webinarId) {
-            // Logika like, jika diperlukan
+
+        getImageUrl(blobData) {
+            console.log('Blob Data:', blobData);
+            // Check if blobData is an object with a data property
+            if (blobData && blobData.data) {
+            // Extract actual data from Proxy
+            const bufferData = blobData.data || [];
+            
+            // Convert Buffer data to Uint8Array
+            const uint8Array = new Uint8Array(bufferData);
+            
+            if (uint8Array.length > 0) {
+                const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
+                return URL.createObjectURL(blob);
+            }
+            }
+        
+            return ''; // or set a default image URL
         },
-        handleCheckboxChange() {
-            // Logika untuk menangani perubahan pada checkbox
+
+        incrementViews(webinar_id) {
+        axios.put(`/increment-views/${webinar_id}`).then(response => {
+            console.log('Views incremented successfully');
+            //bisa kalau ada tampilan views harusnya tampilannya di update disisni
+            })
+            .catch(error => {
+            console.error('Error incrementing views:', error);
+            });
+        },
+        handleH4Click(webinar_id) {
+            // Increment views when the <h4> tag is clicked
+            this.incrementViews(webinar_id);
+        },
+        formatWebinarDate(dateTimeString) {
+            // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' };
+            const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
+            return formattedDate;
+        },
+        formatharga(harga)
+        {
+            if(harga == 0)
+            {
+                return "free";
+            } else {
+                return harga;
+            }
+        },
+        formatsertifikat(sertif)
+        {
+            if(sertif == "y")
+            {
+                return "ya";
+            } else {
+                return "no";
+            }
         },
     },
 };
@@ -129,5 +173,12 @@ export default {
   
 <style scoped>
 @import "@/assets/css/webpage.css";
+
+.more {
+    margin-top: 14px;
+}
+.koko {
+    margin-top: -8px;
+}
 </style>
   
