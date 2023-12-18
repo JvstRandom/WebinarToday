@@ -14,12 +14,18 @@ import SignupUser from '@/view/register/Signup_U.vue';
 import updateUser from '@/view/profile/updateUser.vue';
 import updatePenyelenggara from '@/view/profile/updatePenyelenggara.vue';
 import editWebinar from '@/view/webinar/editWebinar.vue';
+import Tentang from '@/view/Tentang/Tentang.vue';
 
 
 const routes = [
   {
     path: '/',
     component: Home,
+    meta: { showHeader: true, showFooter: true },
+  },
+  {
+    path: '/Tentang',
+    component: Tentang,
     meta: { showHeader: true, showFooter: true },
   },
   {

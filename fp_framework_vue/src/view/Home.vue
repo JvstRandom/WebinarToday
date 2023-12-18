@@ -4,12 +4,95 @@
             <Hero />
         </div>
         <main id="main">
-            <div >
-                <Chart-Webinar />
+            <div  >
+                <ChartTopWebinar />
             </div>
-            <div>
-                <Tentang />
+            <section id="tentang">
+      <div class="container" data-aos="fade-up">
+        <header class="section-header">
+          <h3>Tentang Kami</h3>
+          <p>
+            WebinarToDay merupakan salah satu platform online yang bergerak dalam bidang jasa. Kami membawa bersama
+            pemimpin industri, ahli, dan pembicara terkemuka untuk berbagi pengetahuan, pengalaman, dan wawasan terbaru.
+          </p>
+        </header>
+
+        <div class="row about-container">
+          <div class="col-lg-6 content order-lg-1 order-2">
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+              <div class="icon"><i class="bi bi-card-checklist"></i></div>
+              <h4 class="title">Sesi Weninar</h4>
+              <p class="description">
+                Nikmati pembelajaran langsung dengan para ahli di bidangnya.
+              </p>
             </div>
+
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
+              <div class="icon"><i class="bi bi-brightness-high"></i></div>
+              <h4 class="title">Webinar Berkualitas Tinggi</h4>
+              <p class="description">
+                Menyajikan topik Webinar yang Berkualitas dan relevan dalam berbagai industri.
+              </p>
+            </div>
+
+            <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
+              <div class="icon"><i class="bi bi-calendar4-week"></i></div>
+              <h4 class="title">Kesempatan pengalaman</h4>
+              <p class="description">
+                Mendapatkan pengetahuan dan pengalaman baru yang menarik
+              </p>
+            </div>
+          </div>
+
+          <div class="col-lg-6 background order-lg-2" data-aos="zoom-in">
+            <img src="assets/img/about-img.svg" class="img-fluid" alt="" />
+          </div>
+        </div>
+
+        <div class="row about-extra">
+          <div class="col-lg-6" data-aos="fade-right">
+            <img src="assets/img/about-extra-1.svg" class="img-fluid" alt="" />
+          </div>
+          <div class="col-lg-6 pt-5 pt-lg-0" data-aos="fade-left">
+            <h4>
+              Platform pihak 3
+            </h4>
+            <p>
+              Menyediakan platform yang dapat menjadi wadah bagi penyelenggara webinar agar dapat memudahkan dalam mempromosikan program webinar yang ingin diselenggarakan oleh penyelenggara.
+            </p>
+          </div>
+        </div>
+
+        <div class="row about-extra">
+          <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-left">
+            <img src="assets/img/about-extra-2.svg" class="img-fluid" alt="" />
+          </div>
+
+          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
+            <h4>
+              Neque saepe temporibus repellat ea ipsum et. Id vel et quia
+              tempora facere reprehenderit.
+            </h4>
+            <p>
+              Delectus alias ut incidunt delectus nam placeat in consequatur.
+              Sed cupiditate quia ea quis. Voluptas nemo qui aut distinctio.
+              Cumque fugit earum est quam officiis numquam. Ducimus corporis
+              autem at blanditiis beatae incidunt sunt.
+            </p>
+            <p>
+              Voluptas saepe natus quidem blanditiis. Non sunt impedit voluptas
+              mollitia beatae. Qui esse molestias. Laudantium libero nisi vitae
+              debitis. Dolorem cupiditate est perferendis iusto.
+            </p>
+            <p>
+              Eum quia in. Magni quas ipsum a. Quis ex voluptatem inventore sint
+              quia modi. Numquam est aut fuga mollitia exercitationem nam
+              accusantium provident quia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
 
             <!-- ======= Tawaran Layanan Post Webinar Section ======= -->
             <section id="services" class="section-bg">
@@ -91,10 +174,9 @@
             <section id="why-us">
                 <div class="container" data-aos="fade-up">
                     <header class="section-header">
-                        <h3>Why choose us?</h3>
+                        <h3>Kenapa Harus Memilih kami?</h3>
                         <p>
-                            Laudem latine persequeris id sed, ex fabulas delectus quo. No vel
-                            partiendo abhorreant vituperatoribus.
+                            
                         </p>
                     </header>
 
@@ -141,129 +223,10 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row counters" data-aos="fade-up" data-aos-delay="100">
-                        <div class="col-lg-3 col-6 text-center">
-                            <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1"
-                                class="purecounter"></span>
-                            <p>Clients</p>
-                        </div>
-
-                        <div class="col-lg-3 col-6 text-center">
-                            <span data-purecounter-start="0" data-purecounter-end="421" data-purecounter-duration="1"
-                                class="purecounter"></span>
-                            <p>Projects</p>
-                        </div>
-
-                        <div class="col-lg-3 col-6 text-center">
-                            <span data-purecounter-start="0" data-purecounter-end="1364" data-purecounter-duration="1"
-                                class="purecounter"></span>
-                            <p>Hours Of Support</p>
-                        </div>
-
-                        <div class="col-lg-3 col-6 text-center">
-                            <span data-purecounter-start="0" data-purecounter-end="42" data-purecounter-duration="1"
-                                class="purecounter"></span>
-                            <p>Hard Workers</p>
-                        </div>
-                    </div>
                 </div>
             </section>
             <!-- End Why Us Section -->
 
-            <!-- ======= Testimonials Section ======= -->
-            <section id="testimonials" class="section-bg">
-                <div class="container" data-aso="zoom-in">
-                    <header class="section-header">
-                        <h3>Testimonials</h3>
-                    </header>
-
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-item">
-                                            <img src="assets/img/testimonial-1.jpg" class="testimonial-img" alt="" />
-                                            <h3>Saul Goodman</h3>
-                                            <h4>Ceo &amp; Founder</h4>
-                                            <p>
-                                                Proin iaculis purus consequat sem cure digni ssim donec
-                                                porttitora entum suscipit rhoncus. Accusantium quam,
-                                                ultricies eget id, aliquam eget nibh et. Maecen aliquam,
-                                                risus at semper.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End testimonial item -->
-
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-item">
-                                            <img src="assets/img/testimonial-2.jpg" class="testimonial-img" alt="" />
-                                            <h3>Sara Wilsson</h3>
-                                            <h4>Designer</h4>
-                                            <p>
-                                                Export tempor illum tamen malis malis eram quae irure
-                                                esse labore quem cillum quid cillum eram malis quorum
-                                                velit fore eram velit sunt aliqua noster fugiat irure
-                                                amet legam anim culpa.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End testimonial item -->
-
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-item">
-                                            <img src="assets/img/testimonial-3.jpg" class="testimonial-img" alt="" />
-                                            <h3>Jena Karlis</h3>
-                                            <h4>Store Owner</h4>
-                                            <p>
-                                                Enim nisi quem export duis labore cillum quae magna enim
-                                                sint quorum nulla quem veniam duis minim tempor labore
-                                                quem eram duis noster aute amet eram fore quis sint
-                                                minim.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End testimonial item -->
-
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-item">
-                                            <img src="assets/img/testimonial-4.jpg" class="testimonial-img" alt="" />
-                                            <h3>Matt Brandon</h3>
-                                            <h4>Freelancer</h4>
-                                            <p>
-                                                Fugiat enim eram quae cillum dolore dolor amet nulla
-                                                culpa multos export minim fugiat minim velit minim dolor
-                                                enim duis veniam ipsum anim magna sunt elit fore quem
-                                                dolore labore illum veniam.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End testimonial item -->
-
-                                    <div class="swiper-slide">
-                                        <div class="testimonial-item">
-                                            <img src="assets/img/testimonial-5.jpg" class="testimonial-img" alt="" />
-                                            <h3>John Larson</h3>
-                                            <h4>Entrepreneur</h4>
-                                            <p>
-                                                Quis quorum aliqua sint quem legam fore sunt eram irure
-                                                aliqua veniam tempor noster veniam enim culpa labore
-                                                duis sunt culpa nulla illum cillum fugiat legam esse
-                                                veniam culpa fore nisi cillum quid.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <!-- End testimonial item -->
-                                </div>
-                                <div class="swiper-pagination"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- End Testimonials Section -->
 
             <!-- ======= Team Section ======= -->
             <section id="team">
@@ -432,14 +395,14 @@
 <script>
 import Hero from '@/components/Hero.vue';
 import Tentang from './Tentang/Tentang.vue';
-import ChartWebinar from '@/components/ChartWebinar.vue';
+import ChartTopWebinar from '@/components/ChartTopWebinar.vue';
 import axios from 'axios';
 export default {
     name: "Home",
     components: {
         Hero,
         Tentang,
-        ChartWebinar,
+        ChartTopWebinar,
     },
     data() {
         return {
