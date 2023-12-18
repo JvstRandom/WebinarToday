@@ -22,7 +22,7 @@
 
                     <div class="d-flex justify-content-center portfolio-item filter-web">
                         <div class="card-list" v-for="(webinar, index) in this.webinars" :key="index">
-                                <article class="card column">
+                                <article class="card column tempat">
                                     <figure class="card-image">
                                         <img :src= "getImageUrl(webinar.img)"
                                             alt="webinar img" />
@@ -179,6 +179,10 @@ export default {
 }
 .koko {
     margin-top: -8px;
+}
+.tempat {
+  width: 350px;
+  height: 620px;
 }
 </style>
   

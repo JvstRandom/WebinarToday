@@ -94,6 +94,9 @@
                       {{ formatWebinarDate(webinar.waktu) }}
                     </div>
                   </div>
+                  <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
+                    <button class="w-100 btn btn-primary more" @click="incrementViews(webinar.webinar_id)">Baca Selengkapnya</button>
+                  </RouterLink>
                 </article>
         </div>
 
@@ -187,6 +190,15 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' };
       const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
       return formattedDate;
+    },
+    incrementViews(webinar_id) {
+        axios.put(`/increment-views/${webinar_id}`).then(response => {
+            console.log('Views incremented successfully');
+            //bisa kalau ada tampilan views harusnya tampilannya di update disisni
+            })
+            .catch(error => {
+            console.error('Error incrementing views:', error);
+            });
     },
     prevPage() {
         if (this.currentPage > 1) {
