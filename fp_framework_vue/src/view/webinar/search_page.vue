@@ -1,5 +1,5 @@
 <template>
-  <br><br><br><br>
+
   <div class="container">
     <div class="text1">
       <h3>Webinar</h3>
@@ -46,6 +46,8 @@
             <figure class="card-image">
               <img src="@/assets/img/poster_webinar_upn.png" alt="An orange painted blue, cut in half laying on a blue background" />
             </figure>
+            </article>
+            </RouterLink>
             <div class="card-header">
               <a href="#">{{ webinar.title }}</a>
               <button class="icon-button" @click="like(webinar.id)">
@@ -72,8 +74,7 @@
               </svg>
               {{ webinar.date }}
             </div>
-          </article>
-        </RouterLink>
+          
       </div>
     </div>
     
