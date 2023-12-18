@@ -1,49 +1,39 @@
 <template>
   <div>
     <!-- ======= About Section ======= -->
-    <section id="about">
+    <section id="tentang">
       <div class="container" data-aos="fade-up">
         <header class="section-header">
           <h3>Tentang Kami</h3>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            WebinarToDay merupakan salah satu platform online yang bergerak dalam bidang jasa. Kami membawa bersama
+            pemimpin industri, ahli, dan pembicara terkemuka untuk berbagi pengetahuan, pengalaman, dan wawasan terbaru.
           </p>
         </header>
 
         <div class="row about-container">
           <div class="col-lg-6 content order-lg-1 order-2">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </p>
-
             <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
               <div class="icon"><i class="bi bi-card-checklist"></i></div>
-              <h4 class="title"><a href="">Eiusmod Tempor</a></h4>
+              <h4 class="title">Sesi Weninar</h4>
               <p class="description">
-                Et harum quidem rerum facilis est et expedita distinctio. Nam
-                libero tempore, cum soluta nobis est eligendi
+                Nikmati pembelajaran langsung dengan para ahli di bidangnya.
               </p>
             </div>
 
             <div class="icon-box" data-aos="fade-up" data-aos-delay="200">
               <div class="icon"><i class="bi bi-brightness-high"></i></div>
-              <h4 class="title"><a href="">Magni Dolores</a></h4>
+              <h4 class="title">Webinar Berkualitas Tinggi</h4>
               <p class="description">
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum
+                Menyajikan topik Webinar yang Berkualitas dan relevan dalam berbagai industri.
               </p>
             </div>
 
             <div class="icon-box" data-aos="fade-up" data-aos-delay="300">
               <div class="icon"><i class="bi bi-calendar4-week"></i></div>
-              <h4 class="title"><a href="">Dolor Sitema</a></h4>
+              <h4 class="title">Kesempatan pengalaman</h4>
               <p class="description">
-                Minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                aliquip ex ea commodo consequat tarad limino ata
+                Mendapatkan pengetahuan dan pengalaman baru yang menarik
               </p>
             </div>
           </div>
@@ -59,20 +49,10 @@
           </div>
           <div class="col-lg-6 pt-5 pt-lg-0" data-aos="fade-left">
             <h4>
-              Voluptatem dignissimos provident quasi corporis voluptates sit
-              assumenda.
+              Platform pihak 3
             </h4>
             <p>
-              Ipsum in aspernatur ut possimus sint. Quia omnis est occaecati
-              possimus ea. Quas molestiae perspiciatis occaecati qui rerum.
-              Deleniti quod porro sed quisquam saepe. Numquam mollitia
-              recusandae non ad at et a.
-            </p>
-            <p>
-              Ad vitae recusandae odit possimus. Quaerat cum ipsum corrupti.
-              Odit qui asperiores ea corporis deserunt veritatis quidem expedita
-              perferendis. Qui rerum eligendi ex doloribus quia sit. Porro rerum
-              eum eum.
+              Menyediakan platform yang dapat menjadi wadah bagi penyelenggara webinar agar dapat memudahkan dalam mempromosikan program webinar yang ingin diselenggarakan oleh penyelenggara.
             </p>
           </div>
         </div>
@@ -82,10 +62,7 @@
             <img src="assets/img/about-extra-2.svg" class="img-fluid" alt="" />
           </div>
 
-          <div
-            class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1"
-            data-aos="fade-right"
-          >
+          <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1" data-aos="fade-right">
             <h4>
               Neque saepe temporibus repellat ea ipsum et. Id vel et quia
               tempora facere reprehenderit.
@@ -120,5 +97,4 @@ export default {
 };
 </script>
  
-<style>
-</style>
+<style></style>

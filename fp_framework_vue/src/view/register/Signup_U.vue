@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper w-80">
     <div class="logo">
       <img src="@/assets/img/logowebinartoday.png" alt="">
     </div>
@@ -7,7 +7,7 @@
       <center>{{ judul }}</center>
     </div>
     <br>
-    <form class="p-3 mt-3" @submit.prevent="register">
+    <form class="p-3 mt-3 flex" @submit.prevent="register">
       <div class="form-field d-flex align-items-center">
         <span class="far fa-user"></span>
         <input v-model="username" type="text" name="username" id="username" placeholder="Username">

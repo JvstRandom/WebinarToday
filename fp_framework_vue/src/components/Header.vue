@@ -11,8 +11,9 @@
 
       <nav id="navbar" class="navbar">
         <ul>
+          <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/search">Webinar</router-link></li>
-          <li><router-link to="/tentang-kami">Tentang Kami</router-link></li>
+          <li><a href="#tentang">Tentang Kami</a></li>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
           <li class="dropdown">
             <a href="#"><span>Profile</span> <i class="bi bi-chevron-down"></i></a>
@@ -30,7 +31,9 @@
             </ul>
           </li>
         </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
+        <div class="humberger">
+          <i class="bi bi-list mobile-nav-toggle"></i>
+        </div>
       </nav>
     </div>
   </header>
