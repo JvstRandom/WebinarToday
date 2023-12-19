@@ -65,7 +65,7 @@ const routes = [
     meta: { showHeader: true, showFooter: true, requiresAuth: true },
   },
   {
-    path: '/daftar',
+    path: '/daftar/:user_id/:webinar_id',
     component: daftarWebinar,
     meta: { showHeader: true, showFooter: true },
   },

@@ -13,7 +13,7 @@
             <div class="col-md-6 col-lg-7 d-flex align-items-center">
               <div class="card-body p-4 p-lg-5 text-black">
 
-                <form @submit.prevent="daftarKeWebinar">
+                <form @submit.prevent="daftar($route.params.user_id, $route.params.webinar_id)">
                   <div class="form-outline mb-2">
                     <label class="form-label" for="form2Example17">Nama Lengkap</label>
                     <input v-model="NamaLengkap" type="name" id="form2Example17" class="form-control form-control-lg" placeholder="Nama Lengkap"/>
@@ -36,7 +36,7 @@
                   </div> -->
 
                   <div class="pt-1 mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="button">Daftar</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Daftar</button>
                   </div>
                 </form>
 
@@ -56,25 +56,22 @@
   export default {
     data() {
       return {
-        username: '',
-        email: '',
-        noTelp: '',
-        password: '',
-        konfirmasiPassword: '',
+        NamaLengkap: '',
         judul: 'Daftar User',
       };
     },
     methods: {
-      async register() {
-        await axios.post('registerUser', {
-          username: this.username,
-          email: this.email,
-          noTelp: this.noTelp,
-          password: this.password,
-        });
-
-        //nambah methods lain
-      },
+      async daftar(user_id, webinar_id) {
+        try {
+          const response = await axios.post(`/daftarWebinar/${user_id}/${webinar_id}`, {
+            NamaLengkap: this.NamaLengkap,
+          });
+          console.log('Server Response:', response.data);
+          this.$router.push(`/profile-user`);
+        } catch (error) {
+          console.error('Error submitting form:', error);
+        }
+      }
     },
   };
 </script>
