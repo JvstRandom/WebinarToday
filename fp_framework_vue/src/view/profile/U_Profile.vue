@@ -179,7 +179,7 @@
                   <hr>
                 
                   <div class="webinar-list">
-                        <article v-for="webinar in likedWebinars" :key="webinar.webinar_id" class="card custom-card">
+                        <article v-for="webinar in displayedlikedWebinars" :key="webinar.webinar_id" class="card custom-card">
                             <figure class="card-image">
                               <img :src="getImageUrl(webinar.img)" alt="Webinar Image" />
                             </figure>
@@ -219,16 +219,16 @@
               
               
                 <!-- Pagination controls -->
-                <nav v-if="totalPages > 1">
+                <nav v-if="totalPagesLike > 1">
                   <ul class="pagination">
-                    <li class="page-item" :class="{ disabled: currentPage === 1 }">
-                      <a class="page-link" href="#" @click.prevent="prevPage">&laquo;</a>
+                    <li class="page-item" :class="{ disabled: currentPageLike === 1 }">
+                      <a class="page-link" href="#" @click.prevent="prevPageLike">&laquo;</a>
                     </li>
-                    <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
-                      <a class="page-link" href="#" @click.prevent="gotoPage(page)">{{ page }}</a>
+                    <li class="page-item" v-for="page in totalPagesLike" :key="page" :class="{ active: page === currentPageLike }">
+                      <a class="page-link" href="#" @click.prevent="gotoPageLike(page)">{{ page }}</a>
                     </li>
-                    <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-                      <a class="page-link" href="#" @click.prevent="nextPage">&raquo;</a>
+                    <li class="page-item" :class="{ disabled: currentPageLike === totalPagesLike }">
+                      <a class="page-link" href="#" @click.prevent="nextPageLike">&raquo;</a>
                     </li>
                   </ul>
                 </nav>
@@ -280,7 +280,9 @@
         likedWebinars: [],
         user: {},
         itemsPerPage: 6,
+        itemsPerPageLike: 6,
         currentPage: 1,
+        currentPageLike: 1,
         status: null,
         message: '',
       };
@@ -293,10 +295,18 @@
       totalPages() {
         return Math.ceil(this.webinarList.length / this.itemsPerPage);
       },
+      totalPagesLike() {
+        return Math.ceil(this.likedWebinars.length / this.itemsPerPageLike);
+      },
       displayedWebinars() {
         const startIndex = (this.currentPage - 1) * this.itemsPerPage;
         const endIndex = startIndex + this.itemsPerPage;
         return this.webinarList.slice(startIndex, endIndex);
+      },
+      displayedlikedWebinars() {
+        const startIndex = (this.currentPageLike - 1) * this.itemsPerPageLike;
+        const endIndex = startIndex + this.itemsPerPageLike;
+        return this.likedWebinars.slice(startIndex, endIndex);
       },
     },
 
@@ -507,6 +517,22 @@
         }
       },
 
+      // Metode lain untuk navigasi halaman like
+      prevPageLike() {
+        if (this.currentPageLike > 1) {
+          this.currentPageLike--;
+        }
+      },
+      nextPageLike() {
+        if (this.currentPageLike < this.totalPagesLike) {
+          this.currentPageLike++;
+        }
+      },
+      gotoPageLike(page) {
+        if (page >= 1 && page <= this.totalPagesLike) {
+          this.currentPageLike = page;
+        }
+      },
 
     },
   };
