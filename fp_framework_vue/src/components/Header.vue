@@ -31,9 +31,9 @@
             </ul>
           </li>
         </ul>
-        <div class="humberger">
+        <!-- <div class="humberger">
           <i class="bi bi-list mobile-nav-toggle"></i>
-        </div>
+        </div> -->
       </nav>
     </div>
   </header>

@@ -201,7 +201,7 @@
 
 
             <!-- ======= Team Section ======= -->
-            <section id="team">
+            <!-- <section id="team">
                 <div class="container" data-aos="fade-up">
                     <div class="section-header">
                         <h3>Team</h3>
@@ -285,7 +285,7 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> -->
             <!-- End Team Section -->
 
             <!-- ======= Contact Section ======= -->

@@ -98,7 +98,7 @@
                                         </svg>
                                         {{ formatWebinarDate(webinar.waktu) }}
               </div>
-                         <button @click="like(webinar.webinar_id)">jo</button>          
+                         <!-- <button @click="like(webinar.webinar_id)">jo</button>           -->
               </div>
             <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
               <button class="w-100 btn btn-primary more" @click="incrementViews(webinar.webinar_id)">Baca Selengkapnya</button>
