@@ -20,7 +20,7 @@
                     
                   </div>
 
-                  <div class="form-outline mb-2">
+                  <!-- <div class="form-outline mb-2">
                     <label class="form-label" for="form2Example27">Email</label>
                     <input type="email" id="form2Example27" class="form-control form-control-lg" />
                   </div>
@@ -33,7 +33,7 @@
                   <div class="form-outline mb-2">
                     <label class="form-label" for="form2Example27">Nomor Handphone</label>
                     <input type="HP" id="form2Example27" class="form-control form-control-lg" />
-                  </div>
+                  </div> -->
 
                   <div class="pt-1 mb-4">
                     <button class="btn btn-primary btn-lg btn-block" type="button">Daftar</button>

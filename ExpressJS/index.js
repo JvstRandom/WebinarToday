@@ -72,6 +72,24 @@ app.put('/increment-views/:webinar_id', (req, res) => {
     });
   });
 
+// Save webinar to user profile
+app.post('/save-webinar/:webinar_id', authenticationToken, checkRole('user'), async (req, res) => {
+    const webinar_id = req.params.webinar_id;
+    const user_id = req.user.user_id;
+    console.log("webinar id : ", webinar_id, "webinar id : ", user_id);
+   
+    const sql = `INSERT INTO liked_webinars (user_id, webinar_id) VALUES (?, ?)`;
+    db.query(sql, [user_id, webinar_id], (err, result) => {
+        if (err) {
+            console.error(err);
+            return response(400, "invalid", false, res);
+        }
+        if (result?.affectedRows) {
+            response(200, result.insertId, true, res)
+        }
+    });
+  });
+
 //nampilin webinar sesuai webinar_id
 app.get("/webinar/:webinar_id", (req, res)=> {
     const webinar_id = req.params.webinar_id;
@@ -331,9 +349,10 @@ app.get('/profileUser', authenticationToken, checkRole('user'), (req, res) => {
 app.post('/daftarWebinar/:user_id/:webinar_id', (req, res) => {
     const user_id = req.params.user_id;
     const webinar_id = req.params.webinar_id;
-    const { tgl_pesan } = req.body;
+    const currentDate = new Date().toISOString().split('T')[0];
+    const NamaLengkap = req.body;
 
-    const sql = `INSERT INTO user_order (tgl_pesan, user_id, webinar_id) VALUES ('${tgl_pesan}', '${user_id}', '${webinar_id}')`;
+    const sql = `INSERT INTO user_order (NamaLengkap, tgl_pesan, user_id, webinar_id) VALUES ('${NamaLengkap}','${currentDate}', '${user_id}', '${webinar_id}')`;
     console.log(req.body);
 
     db.query(sql, (err, result) => {

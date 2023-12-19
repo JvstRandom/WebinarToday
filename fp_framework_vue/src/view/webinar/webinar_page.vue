@@ -135,6 +135,7 @@ export default {
   data() {
     return {
       loginUserData: [],
+      likedWebinars: [],
       webinars: [],
       webinarList: [],
       itemsPerPage: 6,
@@ -148,7 +149,6 @@ export default {
     axios.get('/webinar-list').then((res) => {
       this.webinarList = res.data.payload;
     });
-    this.fetchUserLoginData();
   },
   computed: {
       // Calculate total pages based on the number of webinars and items per page
@@ -162,18 +162,18 @@ export default {
         return this.webinarList.slice(startIndex, endIndex);
       },
     },
-  watch: {
-    loginUserData: {
-      immediate: true, // Triggers the handler immediately after component creation
-        handler(newValue, oldValue) {
-        if (newValue !== null) {
-          this.fetchUserData(newValue);
-        } else {
-          console.log("loginUserData is null");
-        }
+    watch: {
+      loginUserData: {
+        immediate: true, // Triggers the handler immediately after component creation
+          handler(newValue, oldValue) {
+          if (newValue !== null) {
+            this.fetchUserData(newValue);
+          } else {
+            console.log("loginUserData is null");
+          }
+        },
       },
     },
-  },
   methods: {
     async fetchUserLoginData() {
       try {
@@ -215,6 +215,16 @@ export default {
         console.error('Error fetching data', error.response.data);
       }
     },
+
+    async initializeData() {
+      await this.fetchUserLoginData();
+
+      if (this.loginUserData) {
+        await this.fetchUserData(this.loginUserData);
+        
+      }
+    },
+
     async logout() {
         try {
             localStorage.removeItem('token');
@@ -231,7 +241,7 @@ export default {
       })
     },
     getImageUrl(blobData) {
-      console.log('Blob Data:', blobData);
+      // console.log('Blob Data:', blobData);
       // Check if blobData is an object with a data property
       if (blobData && blobData.data) {
         // Extract actual data from Proxy
@@ -294,26 +304,31 @@ export default {
       }
     },
     async like(webinar_id) {
-        try {
-          // Check if this.user is defined
-          if (!this.user || !this.user.liked_webinars) {
-            console.error('User data is undefined or missing liked_webinars array.');
-            return;
+      await this.initializeData();
+        if (this.loginUserData) {
+          try {
+            // Check if this.user is defined
+            if (!this.user || !this.user.liked_webinars) {
+              console.error('User data is undefined or missing liked_webinars array.');
+              return;
+            }
+          
+            // Cek apakah webinar_id sudah ada di dalam daftar yang disukai oleh user
+            if (this.likedWebinars && Array.isArray(this.likedWebinars)) {
+              const isLiked = this.likedWebinars.some((webinar) => webinar.webinar_id === webinar_id);
+
+              if (isLiked) {
+                await this.unlikeWebinar(webinar_id);
+              } else {
+                await this.likeWebinar(webinar_id);
+              }
+            } else {
+                console.error('Liked webinars data is undefined or not an array.');
+              }
+          } catch (error) {
+            console.error('Error handling like:', error);
+            // Handle error accordingly
           }
-        
-          // Cek apakah webinar_id sudah ada di dalam daftar yang disukai oleh user
-          const isLiked = this.likedWebinars.some(webinar => webinar.webinar_id === webinar_id);
-        
-          if (isLiked) {
-            // Jika sudah disukai, lakukan request untuk menghapus dari daftar liked_webinars
-            await this.unlikeWebinar(webinar_id);
-          } else {
-            // Jika belum disukai, lakukan request untuk menambahkan ke dalam daftar liked_webinars
-            await this.likeWebinar(webinar_id);
-          }
-        } catch (error) {
-          console.error('Error handling like:', error);
-          // Handle error accordingly
         }
       },
     

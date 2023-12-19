@@ -1,10 +1,12 @@
 <template>
 
+
   <div class="container">
     <div class="text1">
       <h3>Webinar</h3>
       <p>Cari semua webinar yang ada disini sesuai yang kamu inginkan dengan mudah:</p>
     </div>
+
 
     <!-- SEARCH BAR -->
     <div class="search-bar">
@@ -17,26 +19,33 @@
           <input v-model="filter.free" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck1" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck1">Gratis</label>
 
+
           <input v-model="filter.paid" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck2" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck2">Berbayar</label>
+
 
           <input v-model="filter.online" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck3" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck3">Online</label>
 
+
           <input v-model="filter.offline" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck4" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck4">Offline</label>
+
 
           <input v-model="filter.certificate" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck5" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck5">Sertifikat</label>
 
+
           <input v-model="filter.thisWeek" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck6" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck6">Minggu Ini</label>
+
 
           <input v-model="filter.upcoming" @change="handleCheckboxChange" type="checkbox" class="btn-check" id="btncheck7" autocomplete="off">
           <label class="btn btn-outline-primary" for="btncheck7">Yang akan datang</label>
         </div>
       </div>
     </div>
+
 
     <!-- LIST WEBINAR -->
     <div class="list-webinar d-flex justify-content-center">
@@ -51,7 +60,7 @@
             <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
               <div @click ="incrementViews(webinar.webinar_id)"><h5>{{ webinar.namaWebinar }}</h5></div>
             </RouterLink>
-            <button class="icon-button" @click="like(webinar.webinar_id)">
+          <button class="icon-button" @click="like(webinar.webinar_id)" >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
               viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round" stroke-linejoin="round" display="block" id="Heart">
@@ -59,6 +68,7 @@
                 d="M7 3C4.239 3 2 5.216 2 7.95c0 2.207.875 7.445 9.488 12.74a.985.985 0 0 0 1.024 0C21.125 15.395 22 10.157 22 7.95 22 5.216 19.761 3 17 3s-5 3-5 3-2.239-3-5-3z" />
             </svg>
           </button>
+         
           </div>
             <div class="card-body">
               <ul>
@@ -88,25 +98,25 @@
                                         </svg>
                                         {{ formatWebinarDate(webinar.waktu) }}
               </div>
-                                    
+                         <button @click="like(webinar.webinar_id)">jo</button>          
               </div>
             <RouterLink :to="{ path: '/page/' + webinar.webinar_id }" @click.stop>
               <button class="w-100 btn btn-primary more" @click="incrementViews(webinar.webinar_id)">Baca Selengkapnya</button>
            </RouterLink>
-        </article>                           
-          
+        </article>                          
+         
       </div>
     </div>
-    
+   
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
 export default {
   data() {
     return {
-      loginUserData: [],
       searchQuery: '',
       filter: {
         free: false,
@@ -118,20 +128,25 @@ export default {
         upcoming: false,
       },
       webinars: [],
+      loading: false,
+      loginUserData: [],
+      likedWebinars: [],
     };
   },
   mounted() {
+    // this.fetchUserLoginData();
     this.getWebinars();
-    this.fetchUserLoginData();
   },
   computed: {
     filteredWebinars() {
     const searchTerm = this.searchQuery.toLowerCase().trim();
     const currentDate = new Date(); // Current date and time
 
+
     // Calculate the end of the current week
     const endOfWeek = new Date();
     endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay())); // Assuming Sunday is the end of the week
+
 
     return this.webinars.filter((webinar) => {
       // cek search input
@@ -145,143 +160,82 @@ export default {
       const isThisWeek = this.filter.thisWeek ? (new Date(webinar.waktu) >= currentDate && new Date(webinar.waktu) <= endOfWeek) : true;
       const isUpcoming = this.filter.upcoming ? (new Date(webinar.waktu) >= endOfWeek) : true;
 
+
       // return conditions that are met
       return namaWebinarMatch && isFree && isPaid && isOnline && isOffline && hasCertificate && isThisWeek && isUpcoming;
     });
   },
   },
-  watch: {
-    loginUserData: {
-      immediate: true, // Triggers the handler immediately after component creation
-        handler(newValue, oldValue) {
-        if (newValue !== null) {
-          this.fetchUserData(newValue);
-        } else {
-          console.log("loginUserData is null");
-        }
-      },
-    },
-  },
   methods: {
-    async fetchUserLoginData() {
-      try {
-        const response = await axios.get('profileUser', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        console.log(response);
-        console.log(response.data.loginUserData);
-        if(response.data.loginUserData){
-            this.loginUserData = response.data.loginUserData.user_id;
-            console.log(this.loginUserData);
-            
-        } else {
-            console.error('loginUserData is undefined in response:', response);
-        }
-        this.message = response.data.message;
-      } catch (error) {
-        this.$router.push('/loginuser');
-        console.error('Failed to fetch protected data:', error.response.data.error);
-      }
-    },
-    async fetchUserData(user_id) {
-      try {
-        // Make a request to fetch organisasi data
-        const userResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
-        console.log('User API Response:', userResponse.data);
-        if (userResponse.data && userResponse.data.payload) {
-          this.user = userResponse.data.payload;
-          // Initialize liked_webinars array if it's not present
-          if (!this.user.liked_webinars) {
-            this.user.liked_webinars = [];
-          }
-          // Fetch liked webinars based on user_id
-          this.fetchUserLikedWebinars(user_id);
-        }
-      } catch (error) {
-        console.error('Error fetching data', error.response.data);
-      }
-    },
-    async logout() {
-        try {
-            localStorage.removeItem('token');
-            console.log('succesfully logged out');
-            this.$router.push('/');
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
-    },
     async getWebinars() {
             try {
                 const response = await axios.get(`/webinar-list`);
-                console.log(response);
+                // console.log(response);
                 this.webinars = response.data.payload;
-                console.log(this.webinars);
+                // console.log(this.webinars);
             }
             catch (error) {
                 console.error('Error fetching webinars:', error);
             }
     },
 
-    getImageUrl(blobData) {
-            console.log('Blob Data:', blobData);
-            // Check if blobData is an object with a data property
-            if (blobData && blobData.data) {
-            // Extract actual data from Proxy
-            const bufferData = blobData.data || [];
-            
-            // Convert Buffer data to Uint8Array
-            const uint8Array = new Uint8Array(bufferData);
-            
-            if (uint8Array.length > 0) {
-                const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
-                return URL.createObjectURL(blob);
-            }
-            }
-        
-            return ''; // or set a default image URL
-        },
 
-        incrementViews(webinar_id) {
-        axios.put(`/increment-views/${webinar_id}`).then(response => {
-            console.log('Views incremented successfully');
-            //bisa kalau ada tampilan views harusnya tampilannya di update disisni
-            })
-            .catch(error => {
-            console.error('Error incrementing views:', error);
-            });
-        },
-        
-        formatWebinarDate(dateTimeString) {
-            // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
-            const options = { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' };
-            const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
-            return formattedDate;
-        },
-        formatharga(harga)
-        {
-            if(harga == 0)
-            {
-                return "free";
-            } else {
-                return harga;
-            }
-        },
-        formatsertifikat(sertif)
-        {
-            if(sertif == "y")
-            {
-                return "ya";
-            } else {
-                return "no";
-            }
-        },
-    search() {
-      // Logika pencarian, jika diperlukan
-    },
+    async fetchUserLoginData() {
+        try {
+          const response = await axios.get('profileUser', {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
 
-    async fetchUserLikedWebinars(user_id) {
+
+          console.log(response);
+          console.log(response.data.loginUserData);
+          if(response.data.loginUserData){
+              this.loginUserData = response.data.loginUserData.user_id;
+              console.log(this.loginUserData);
+             
+          } else {
+              console.error('loginUserData is undefined in response:', response);
+          }
+
+
+          this.message = response.data.message;
+        } catch (error) {
+          this.$router.push('/loginuser');
+          console.error('Failed to fetch protected data:', error.response.data.error);
+        }
+      },
+
+      async fetchUserData(user_id) {
+      try {
+          // Make a request to fetch organisasi data
+          const userResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
+          console.log('User API Response:', userResponse.data);
+          if (userResponse.data && userResponse.data.payload) {
+            this.user = userResponse.data.payload;
+            // Initialize liked_webinars array if it's not present
+            if (!this.user.liked_webinars) {
+              this.user.liked_webinars = [];
+            }
+            // Fetch liked webinars based on user_id
+            this.fetchUserLikedWebinars(user_id);
+          }
+        } catch (error) {
+          console.error('Error fetching data', error.response.data);
+        }
+      },
+
+      async initializeData() {
+        await this.fetchUserLoginData();
+
+        if (this.loginUserData) {
+          await this.fetchUserData(this.loginUserData);
+          
+        }
+      },
+
+      async fetchUserLikedWebinars(user_id) {
       try {
         const response = await axios.get(`/liked-webinars/${user_id}`);
         console.log(response.data);
@@ -295,31 +249,38 @@ export default {
         console.error('Failed to fetch user liked webinars:', error);
       }
     },
+
+
     async like(webinar_id) {
-        try {
-          // Check if this.user is defined
-          if (!this.user || !this.user.liked_webinars) {
-            console.error('User data is undefined or missing liked_webinars array.');
-            return;
+      await this.initializeData();
+        if (this.loginUserData) {
+          try {
+            // Check if this.user is defined
+            if (!this.user || !this.user.liked_webinars) {
+              console.error('User data is undefined or missing liked_webinars array.');
+              return;
+            }
+          
+            // Cek apakah webinar_id sudah ada di dalam daftar yang disukai oleh user
+            if (this.likedWebinars && Array.isArray(this.likedWebinars)) {
+              const isLiked = this.likedWebinars.some((webinar) => webinar.webinar_id === webinar_id);
+
+              if (isLiked) {
+                await this.unlikeWebinar(webinar_id);
+              } else {
+                await this.likeWebinar(webinar_id);
+              }
+            } else {
+                console.error('Liked webinars data is undefined or not an array.');
+              }
+          } catch (error) {
+            console.error('Error handling like:', error);
+            // Handle error accordingly
           }
-        
-          // Cek apakah webinar_id sudah ada di dalam daftar yang disukai oleh user
-          const isLiked = this.likedWebinars.some(webinar => webinar.webinar_id === webinar_id);
-        
-          if (isLiked) {
-            // Jika sudah disukai, lakukan request untuk menghapus dari daftar liked_webinars
-            await this.unlikeWebinar(webinar_id);
-          } else {
-            // Jika belum disukai, lakukan request untuk menambahkan ke dalam daftar liked_webinars
-            await this.likeWebinar(webinar_id);
-          }
-        } catch (error) {
-          console.error('Error handling like:', error);
-          // Handle error accordingly
         }
-      },
-    
-      async likeWebinar(webinar_id) {
+    },
+
+    async likeWebinar(webinar_id) {
         try {
           const response = await axios.post(`/like-webinar/${this.loginUserData}/${webinar_id}`);
         
@@ -352,12 +313,70 @@ export default {
         }
       },
 
+    getImageUrl(blobData) {
+            // console.log('Blob Data:', blobData);
+            // Check if blobData is an object with a data property
+            if (blobData && blobData.data) {
+            // Extract actual data from Proxy
+            const bufferData = blobData.data || [];
+           
+            // Convert Buffer data to Uint8Array
+            const uint8Array = new Uint8Array(bufferData);
+           
+            if (uint8Array.length > 0) {
+                const blob = new Blob([uint8Array], { type: 'image/jpeg' }); // Adjust the type based on your image format
+                return URL.createObjectURL(blob);
+            }
+            }
+       
+            return ''; // or set a default image URL
+        },
+
+
+        incrementViews(webinar_id) {
+        axios.put(`/increment-views/${webinar_id}`).then(response => {
+            console.log('Views incremented successfully');
+            //bisa kalau ada tampilan views harusnya tampilannya di update disisni
+            })
+            .catch(error => {
+            console.error('Error incrementing views:', error);
+            });
+        },
+       
+        formatWebinarDate(dateTimeString) {
+            // const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZone: 'UTC' };
+            const options = { year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC' };
+            const formattedDate = new Date(dateTimeString).toLocaleString(undefined, options);
+            return formattedDate;
+        },
+        formatharga(harga)
+        {
+            if(harga == 0)
+            {
+                return "free";
+            } else {
+                return harga;
+            }
+        },
+        formatsertifikat(sertif)
+        {
+            if(sertif == "y")
+            {
+                return "ya";
+            } else {
+                return "no";
+            }
+        },
+    search() {
+      // Logika pencarian, jika diperlukan
+    },
     handleCheckboxChange() {
       // Logika untuk menangani perubahan pada checkbox
     },
   },
 };
 </script>
+
 
 <style scoped>
 @import "@/assets/css/list.css";
