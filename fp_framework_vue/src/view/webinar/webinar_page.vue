@@ -4,7 +4,7 @@
     <!-- ***** Banner Start ***** -->
     <div class="row">
       <div class="col-lg-12">
-        <div class="main-profile" v-for="(webinar, index) in this.webinarList" :key="index">
+        <div class="main-profile" v-for="(webinar, index) in this.webinars" :key="index">
           <div class="row" >
             <div class="col-lg-4 custom-image">
               <img :src="getImageUrl(webinar.img)" alt="Webinar Image" style="border-radius: 23px;">
@@ -231,7 +231,7 @@ export default {
             this.fetchUserLoginData().then(() => {
                 // Navigate to AddWebinar with logindata
                 console.log('ini navigate:', this.loginUserData, " ", webinar.webinar_id);
-                this.$router.push(`/daftar/${this.loginUserData}/${webinar.webinar_id}`);
+                this.$router.push(`/daftar/${this.loginUserData}/${this.$route.params.id}`);
             });
         },
 

@@ -50,7 +50,7 @@
     <!-- LIST WEBINAR -->
     <div class="list-webinar d-flex justify-content-center">
       <!-- <div class="card-list" v-for="webinar in filteredWebinars" :key="webinar.id"> -->
-      <div class="card-list" v-for="(webinar, index) in filteredWebinars" :key="index">
+      <div class="card-list" v-for="(webinar, index) in displayedWebinars" :key="index">
         <article class="card column tempat">
           <figure class="card-image">
           <img :src= "getImageUrl(webinar.img)"
@@ -107,7 +107,21 @@
          
       </div>
     </div>
-   
+   <!-- Pagination controls -->
+    <nav v-if="totalPages > 1">
+      <ul class="pagination">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a class="page-link" href="#" @click.prevent="prevPage">&laquo;</a>
+        </li>
+        <li class="page-item" v-for="page in totalPages" :key="page" :class="{ active: page === currentPage }">
+          <a class="page-link" href="#" @click.prevent="gotoPage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <a class="page-link" href="#" @click.prevent="nextPage">&raquo;</a>
+        </li>
+      </ul>
+    </nav>
+
   </div>
 </template>
 
@@ -131,6 +145,8 @@ export default {
       loading: false,
       loginUserData: [],
       likedWebinars: [],
+      itemsPerPage: 12,
+      currentPage: 1,
     };
   },
   mounted() {
@@ -139,32 +155,41 @@ export default {
   },
   computed: {
     filteredWebinars() {
-    const searchTerm = this.searchQuery.toLowerCase().trim();
-    const currentDate = new Date(); // Current date and time
+      const searchTerm = this.searchQuery.toLowerCase().trim();
+      const currentDate = new Date(); // Current date and time
 
 
-    // Calculate the end of the current week
-    const endOfWeek = new Date();
-    endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay())); // Assuming Sunday is the end of the week
+      // Calculate the end of the current week
+      const endOfWeek = new Date();
+      endOfWeek.setDate(endOfWeek.getDate() + (6 - endOfWeek.getDay())); // Assuming Sunday is the end of the week
 
 
-    return this.webinars.filter((webinar) => {
-      // cek search input
-      const namaWebinarMatch = webinar.namaWebinar.toLowerCase().includes(searchTerm);
-      // checkboxes
-      const isFree = this.filter.free ? (webinar.harga === 0) : true;
-      const isPaid = this.filter.paid ? (webinar.harga !== 0) : true;
-      const isOnline = this.filter.online ? (webinar.Online === 'y') : true;
-      const isOffline = this.filter.offline ? (webinar.Online === 'n') : true;
-      const hasCertificate = this.filter.certificate ? (webinar.sertif === 'y') : true;
-      const isThisWeek = this.filter.thisWeek ? (new Date(webinar.waktu) >= currentDate && new Date(webinar.waktu) <= endOfWeek) : true;
-      const isUpcoming = this.filter.upcoming ? (new Date(webinar.waktu) >= endOfWeek) : true;
+      return this.webinars.filter((webinar) => {
+        // cek search input
+        const namaWebinarMatch = webinar.namaWebinar.toLowerCase().includes(searchTerm);
+        // checkboxes
+        const isFree = this.filter.free ? (webinar.harga === 0) : true;
+        const isPaid = this.filter.paid ? (webinar.harga !== 0) : true;
+        const isOnline = this.filter.online ? (webinar.Online === 'y') : true;
+        const isOffline = this.filter.offline ? (webinar.Online === 'n') : true;
+        const hasCertificate = this.filter.certificate ? (webinar.sertif === 'y') : true;
+        const isThisWeek = this.filter.thisWeek ? (new Date(webinar.waktu) >= currentDate && new Date(webinar.waktu) <= endOfWeek) : true;
+        const isUpcoming = this.filter.upcoming ? (new Date(webinar.waktu) >= endOfWeek) : true;
 
 
-      // return conditions that are met
-      return namaWebinarMatch && isFree && isPaid && isOnline && isOffline && hasCertificate && isThisWeek && isUpcoming;
-    });
-  },
+        // return conditions that are met
+        return namaWebinarMatch && isFree && isPaid && isOnline && isOffline && hasCertificate && isThisWeek && isUpcoming;
+      });
+    },
+    totalPages() {
+      return Math.ceil(this.filteredWebinars.length / this.itemsPerPage);
+    },
+    // Calculate the array of webinars to display on the current page
+    displayedWebinars() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.filteredWebinars.slice(startIndex, endIndex);
+    },
   },
   methods: {
     async getWebinars() {
@@ -366,6 +391,21 @@ export default {
             } else {
                 return "no";
             }
+        },
+        prevPage() {
+          if (this.currentPage > 1) {
+            this.currentPage--;
+          }
+        },
+        nextPage() {
+          if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+          }
+        },
+        gotoPage(page) {
+          if (page >= 1 && page <= this.totalPages) {
+            this.currentPage = page;
+          }
         },
     search() {
       // Logika pencarian, jika diperlukan
