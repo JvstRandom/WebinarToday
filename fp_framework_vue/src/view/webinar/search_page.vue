@@ -1,7 +1,7 @@
 <template>
 
 
-  <div class="container">
+  <div class="box">
     <div class="text1">
       <h3>Webinar</h3>
       <p>Cari semua webinar yang ada disini sesuai yang kamu inginkan dengan mudah:</p>
@@ -389,5 +389,10 @@ export default {
 }
 .koko {
     margin-top: -8px;
+}
+
+.box{
+  width: 100%;
+  padding: 0 40px 30px 40px;
 }
 </style>

@@ -7,17 +7,6 @@
                     <h3 class="section-title">Top Webinar dan Seminar</h3>
                 </header>
 
-                <!-- <div class="row" data-aos="fade-up" data-aos-delay="100">
-                    <div class="col-lg-12">
-                        <ul id="portfolio-flters">
-                            <li data-filter="*" class="filter-active">All</li>
-                            <li data-filter=".filter-app">App</li>
-                            <li data-filter=".filter-card">Card</li>
-                            <li data-filter=".filter-web">Web</li>
-                        </ul>
-                    </div>
-                </div> -->
-
                 <div class="row portfolio-container flex" data-aos="fade-up" data-aos-delay="200">
 
                     <div class="d-flex justify-content-center portfolio-item filter-web">
@@ -78,7 +67,9 @@
                     </div>
 
                 </div>
-
+                <div class="moreinfo">
+                    <Router-link  class="cari" to="/search">Lihat semua</Router-link>
+                </div>
             </div>
         </section><!-- End Portfolio Section -->
     </div>
@@ -184,5 +175,27 @@ export default {
   width: 350px;
   height: 620px;
 }
+.moreinfo{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
+
+.moreinfo .cari{
+    color: rgb(255, 255, 255);
+    background-color: rgb(40, 40, 228);
+    font-weight: 700;
+    padding: 10px 15px;
+    border-radius: 10px;
+    /* width: 140px;
+    height: 0px; */
+}
+.moreinfo .cari:hover{
+    color: rgb(40, 40, 228);
+    background-color: #ffff;
+}
+
+
 </style>
   
