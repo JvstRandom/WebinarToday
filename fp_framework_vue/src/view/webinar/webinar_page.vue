@@ -134,6 +134,7 @@ export default {
   name: 'webinars',
   data() {
     return {
+      loginUserData: [],
       webinars: [],
       webinarList: [],
       itemsPerPage: 6,
@@ -147,6 +148,7 @@ export default {
     axios.get('/webinar-list').then((res) => {
       this.webinarList = res.data.payload;
     });
+    this.fetchUserLoginData();
   },
   computed: {
       // Calculate total pages based on the number of webinars and items per page
@@ -160,7 +162,68 @@ export default {
         return this.webinarList.slice(startIndex, endIndex);
       },
     },
+  watch: {
+    loginUserData: {
+      immediate: true, // Triggers the handler immediately after component creation
+        handler(newValue, oldValue) {
+        if (newValue !== null) {
+          this.fetchUserData(newValue);
+        } else {
+          console.log("loginUserData is null");
+        }
+      },
+    },
+  },
   methods: {
+    async fetchUserLoginData() {
+      try {
+        const response = await axios.get('profileUser', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        console.log(response);
+        console.log(response.data.loginUserData);
+        if(response.data.loginUserData){
+            this.loginUserData = response.data.loginUserData.user_id;
+            console.log(this.loginUserData);
+            
+        } else {
+            console.error('loginUserData is undefined in response:', response);
+        }
+        this.message = response.data.message;
+      } catch (error) {
+        this.$router.push('/loginuser');
+        console.error('Failed to fetch protected data:', error.response.data.error);
+      }
+    },
+    async fetchUserData(user_id) {
+      try {
+        // Make a request to fetch organisasi data
+        const userResponse = await axios.get(`http://localhost:8000/user/${user_id}`);
+        console.log('User API Response:', userResponse.data);
+        if (userResponse.data && userResponse.data.payload) {
+          this.user = userResponse.data.payload;
+          // Initialize liked_webinars array if it's not present
+          if (!this.user.liked_webinars) {
+            this.user.liked_webinars = [];
+          }
+          // Fetch liked webinars based on user_id
+          this.fetchUserLikedWebinars(user_id);
+        }
+      } catch (error) {
+        console.error('Error fetching data', error.response.data);
+      }
+    },
+    async logout() {
+        try {
+            localStorage.removeItem('token');
+            console.log('succesfully logged out');
+            this.$router.push('/');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    },
     getWebinars(webinar_id) {
       axios.get(`/webinar/${webinar_id}`).then(res => {
         this.webinars = res.data.payload;
@@ -215,7 +278,77 @@ export default {
           this.currentPage = page;
         }
       },
-
+      
+      async fetchUserLikedWebinars(user_id) {
+      try {
+        const response = await axios.get(`/liked-webinars/${user_id}`);
+        console.log(response.data);
+      
+        if (response.data.status === 'success') {
+          this.likedWebinars = response.data.payload;
+        }
+      
+        this.message = response.data.message;
+      } catch (error) {
+        console.error('Failed to fetch user liked webinars:', error);
+      }
+    },
+    async like(webinar_id) {
+        try {
+          // Check if this.user is defined
+          if (!this.user || !this.user.liked_webinars) {
+            console.error('User data is undefined or missing liked_webinars array.');
+            return;
+          }
+        
+          // Cek apakah webinar_id sudah ada di dalam daftar yang disukai oleh user
+          const isLiked = this.likedWebinars.some(webinar => webinar.webinar_id === webinar_id);
+        
+          if (isLiked) {
+            // Jika sudah disukai, lakukan request untuk menghapus dari daftar liked_webinars
+            await this.unlikeWebinar(webinar_id);
+          } else {
+            // Jika belum disukai, lakukan request untuk menambahkan ke dalam daftar liked_webinars
+            await this.likeWebinar(webinar_id);
+          }
+        } catch (error) {
+          console.error('Error handling like:', error);
+          // Handle error accordingly
+        }
+      },
+    
+      async likeWebinar(webinar_id) {
+        try {
+          const response = await axios.post(`/like-webinar/${this.loginUserData}/${webinar_id}`);
+        
+          if (response.data.status === 'success') {
+            this.user.liked_webinars.push(webinar_id);
+          }
+        
+          this.status = response.data.status;
+          this.message = response.data.message;
+        } catch (error) {
+          console.error('Error liking webinar:', error);
+        }
+      },
+    
+      async unlikeWebinar(webinar_id) {
+        try {
+          const response = await axios.delete(`/unlike-webinar/${this.loginUserData}/${webinar_id}`);
+        
+          if (response.data.status === 'success') {
+            const index = this.user.liked_webinars.indexOf(webinar_id);
+            if (index !== -1) {
+              this.user.liked_webinars.splice(index, 1);
+            }
+          }
+        
+          this.status = response.data.status;
+          this.message = response.data.message;
+        } catch (error) {
+          console.error('Error unliking webinar:', error);
+        }
+      },
   }
 };
 </script>
